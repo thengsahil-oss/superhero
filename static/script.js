@@ -203,7 +203,7 @@ async function initiatePayment(amount) {
     const options = {
         "key": "YOUR_RAZORPAY_KEY_ID",
         "amount": order.amount,
-        "currency": "INR",https://www.youtube.com/embed/Lt-U_t2pUHI
+        "currency": "INR",
         "order_id": order.id,
         "handler": function (response) {
             alert("Payment Successful! Payment ID: " + response.razorpay_payment_id);
