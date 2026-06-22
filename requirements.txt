@@ -1,7 +1,4 @@
 Flask
+gunicorn
 supabase
 python-dotenv
-python-jose[cryptography]
-razorpay
-gunicorn
-waitress
