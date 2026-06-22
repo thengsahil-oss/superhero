@@ -132,7 +132,7 @@
             z-index: 0;
         }
 
-        /* Top Right Logo & Sign Up */
+        /* Top Right Elements (Logo, Cart, Sign Up) */
         .top-right-logo {
             position: absolute;
             top: 35px;
@@ -141,13 +141,29 @@
             z-index: 30;
         }
         .top-right-logo img { height: 100%; opacity: 0.9; }
-        
-        .signup-btn {
-            position: absolute; top: 25px; right: 200px; z-index: 100;
-            color: white; text-decoration: none; font-family: 'Oswald', sans-serif; 
-            letter-spacing: 2px; font-size: 0.9rem; opacity: 0.8; padding: 10px 20px; transition: 0.3s;
+
+        .top-actions {
+            position: absolute; 
+            top: 25px; 
+            right: 180px; 
+            z-index: 100;
+            display: flex;
+            gap: 15px;
+            align-items: center;
         }
-        .signup-btn:hover { opacity: 1; color: var(--theme-color); }
+        
+        .signup-btn, .cart-btn-top {
+            color: white; text-decoration: none; font-family: 'Oswald', sans-serif; 
+            letter-spacing: 2px; font-size: 0.9rem; padding: 10px 20px; transition: 0.3s;
+            border: 1px solid rgba(255,255,255,0.3); border-radius: 5px;
+            cursor: pointer;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+        }
+        
+        .signup-btn:hover, .cart-btn-top:hover { 
+            background: var(--theme-color); color: black; border-color: var(--theme-color);
+        }
 
         /* =========================================
            MASTER TABS & SCROLLING SETUP
@@ -159,13 +175,11 @@
             animation: fadeIn 0.4s ease forwards;
             position: relative;
             z-index: 10;
-            overflow-y: auto; /* ENABLES LONG SCROLL */
+            overflow-y: auto;
             overflow-x: hidden;
             scroll-behavior: smooth;
         }
-        .master-tab.active-master {
-            display: block; /* Changed to block for scrolling */
-        }
+        .master-tab.active-master { display: block; }
         
         .master-tab::-webkit-scrollbar { width: 8px; }
         .master-tab::-webkit-scrollbar-track { background: rgba(0,0,0,0.5); }
@@ -190,39 +204,23 @@
         /* =========================================
            SCROLLING LAYOUT (BATTLEFIELD STYLE)
         ========================================= */
-        .scroll-section {
-            position: relative;
-            width: 100%;
-            min-height: 100vh;
-            padding: 100px 8%;
-            display: flex;
-            align-items: center;
-        }
-
-        /* Section 1: Hero */
+        .scroll-section { position: relative; width: 100%; min-height: 100vh; padding: 100px 8%; display: flex; align-items: center; }
         .hero-section { justify-content: flex-start; }
         
         .character-title {
             display: flex; flex-direction: column; font-family: 'Oswald', sans-serif;
             font-size: 8rem; line-height: 0.9; margin-bottom: 30px;
-            text-transform: uppercase; letter-spacing: 5px;
-            position: relative; z-index: 2;
+            text-transform: uppercase; letter-spacing: 5px; position: relative; z-index: 2;
         }
         .title-bold { font-weight: 700; color: white; }
         .title-light { font-weight: 300; color: var(--theme-color); }
 
         .hero-bg-cutout {
-            position: absolute;
-            right: 5%;
-            bottom: 0;
-            height: 90vh;
-            z-index: 1;
-            filter: drop-shadow(-20px 20px 30px rgba(0,0,0,0.8));
-            pointer-events: none;
+            position: absolute; right: 5%; bottom: 0; height: 90vh; z-index: 1;
+            filter: drop-shadow(-20px 20px 30px rgba(0,0,0,0.8)); pointer-events: none;
             transition: opacity 0.5s ease, transform 0.5s ease;
         }
 
-        /* Angular Background Accents */
         .diagonal-accent {
             position: absolute; width: 150%; height: 200px; background: var(--theme-color);
             transform: rotate(-15deg); z-index: 0; opacity: 0.05; transition: background 0.5s ease;
@@ -230,7 +228,6 @@
         .accent-1 { top: 20%; left: -20%; }
         .accent-2 { bottom: -100px; right: -20%; }
 
-        /* Section 2: Feature Split */
         .feature-section {
             background: rgba(255,255,255,0.02); border-top: 1px solid rgba(255,255,255,0.05);
             border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; gap: 50px; min-height: 70vh;
@@ -244,91 +241,94 @@
         .action-btn {
             background: transparent; color: white; border: 1px solid var(--theme-color);
             padding: 12px 30px; font-family: 'Oswald', sans-serif; font-size: 1rem;
-            letter-spacing: 3px; cursor: pointer; transition: all 0.3s;
-            width: fit-content; text-transform: uppercase;
+            letter-spacing: 3px; cursor: pointer; transition: all 0.3s; width: fit-content; text-transform: uppercase;
         }
         .action-btn:hover { background: var(--theme-color); color: black; }
 
-        /* Section 3: Centered Character */
-        .centerpiece-section {
-            display: flex; justify-content: space-between; align-items: center; min-height: 80vh; text-align: center;
-        }
+        .centerpiece-section { display: flex; justify-content: space-between; align-items: center; min-height: 80vh; text-align: center; }
         .side-text-block { flex: 1; text-align: left; padding: 0 40px; }
         .side-text-block.right { text-align: right; }
         .side-text-block h3 { font-family: 'Oswald', sans-serif; font-size: 1.5rem; color: white; letter-spacing: 2px; margin-bottom: 15px; text-transform: uppercase; }
         .side-text-block p { color: var(--text-light); font-size: 0.95rem; line-height: 1.6; }
-
         .center-focus { flex: 1; position: relative; display: flex; justify-content: center; align-items: center; height: 600px; }
         .center-bg-box { position: absolute; width: 250px; height: 400px; background: var(--theme-color); z-index: 1; transition: 0.5s ease; }
         .center-focus img { position: relative; z-index: 2; height: 110%; filter: drop-shadow(0px 20px 20px rgba(0,0,0,0.8)); transition: 0.5s ease; }
 
-        /* Section 4: Tall Roster Cards */
         .roster-section { flex-direction: column; align-items: flex-start; padding-bottom: 150px; }
         .roster-grid { display: flex; gap: 20px; width: 100%; margin-top: 50px; justify-content: space-between; }
-        
-        .roster-card {
-            flex: 1; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1);
-            height: 500px; display: flex; flex-direction: column; transition: 0.3s; cursor: pointer; position: relative; overflow: hidden;
-        }
+        .roster-card { flex: 1; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); height: 500px; display: flex; flex-direction: column; transition: 0.3s; cursor: pointer; position: relative; overflow: hidden; }
         .roster-card:hover { border-color: var(--theme-color); transform: translateY(-10px); background: rgba(255,255,255,0.08); }
         .roster-card-img { height: 70%; width: 100%; background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; padding: 20px; }
         .roster-card-img img { max-height: 100%; max-width: 100%; object-fit: contain; opacity: 0.8; transition: 0.3s; }
         .roster-card:hover .roster-card-img img { opacity: 1; transform: scale(1.1); }
         .roster-card-info { padding: 20px; border-top: 1px solid rgba(255,255,255,0.05); }
         .roster-card-info h4 { font-family: 'Oswald', sans-serif; font-size: 1.2rem; color: white; letter-spacing: 2px; margin-bottom: 10px; }
-        
         .stat-bar { display: flex; align-items: center; margin-bottom: 5px; font-size: 0.7rem; color: var(--text-light); }
         .stat-bar span { width: 60px; }
         .stat-fill { flex: 1; height: 4px; background: rgba(255,255,255,0.1); margin-left: 10px; position: relative; }
         .stat-fill::after { content: ''; position: absolute; top: 0; left: 0; height: 100%; background: var(--theme-color); transition: 0.5s ease; }
 
         /* =========================================
-           OTHER LAYOUTS (HISTORIA, POSTER, DISEÑO)
+           OTHER LAYOUTS & SHOP
         ========================================= */
         .full-page-content { padding: 100px; width: 100%; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; }
         .history-columns { display: column; column-count: 2; column-gap: 50px; margin-top: 30px; }
-        
         .poster-container { display: flex; justify-content: center; align-items: center; min-height: 100vh; width: 100%; }
         .poster-image { height: 80vh; border-radius: 15px; box-shadow: 0 20px 50px rgba(0,0,0,0.9); border: 2px solid rgba(255,255,255,0.1); }
-
         .hud-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 40px; }
         .hud-box { background: rgba(0, 20, 40, 0.4); border: 1px solid var(--theme-color); padding: 30px; border-radius: 10px; backdrop-filter: blur(5px); }
         .hud-title { font-family: 'Oswald', sans-serif; color: white; letter-spacing: 2px; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 10px; }
 
-        /* =========================================
-           SHOP LAYOUT
-        ========================================= */
         .shop-wrapper { width: 100%; padding: 100px 10%; display: flex; flex-direction: column; align-items: center; }
         .shop-header h2 { font-family: 'Oswald', sans-serif; font-size: 4rem; color: white; letter-spacing: 5px; margin-bottom: 40px; text-transform: uppercase; }
         .product-gallery { display: flex; justify-content: center; gap: 50px; flex-wrap: wrap; width: 100%; }
-        .product-item { width: 280px; background: transparent; border: 1px solid var(--theme-color); border-radius: 10px; padding: 15px; display: flex; flex-direction: column; transition: transform 0.3s ease; }
-        .product-item:hover { transform: translateY(-5px); }
+        .product-item { width: 280px; background: rgba(0,0,0,0.6); border: 1px solid var(--theme-color); border-radius: 10px; padding: 15px; display: flex; flex-direction: column; transition: transform 0.3s ease; backdrop-filter: blur(5px); }
+        .product-item:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
         .product-image-box { width: 100%; height: 320px; border-radius: 8px; overflow: hidden; margin-bottom: 20px; background-color: #1a1a1a; }
         .product-image-box img { width: 100%; height: 100%; object-fit: cover; }
-        .product-details h3 { font-family: 'Oswald', sans-serif; color: white; font-size: 1.3rem; margin: 0 0 15px 0; }
-        .buy-btn { background: transparent; color: white; border: 1px solid rgba(255, 255, 255, 0.5); padding: 10px 20px; font-family: 'Oswald', sans-serif; letter-spacing: 2px; cursor: pointer; transition: 0.3s; width: 100%; }
-        .buy-btn:hover { background: white; color: black; }
+        .product-details h3 { font-family: 'Oswald', sans-serif; color: white; font-size: 1.3rem; margin: 0 0 5px 0; }
+        .product-price { font-size: 1.1rem; color: var(--text-light); margin-bottom: 15px; font-weight: bold; }
+        
+        .button-group { display: flex; gap: 10px; width: 100%; margin-top: auto; }
+        .cart-btn, .buy-btn { flex: 1; padding: 10px 0; font-family: 'Oswald', sans-serif; font-size: 0.9rem; letter-spacing: 1px; cursor: pointer; transition: 0.3s; border-radius: 4px; text-align: center; text-transform: uppercase; }
+        .cart-btn { background: transparent; color: white; border: 1px solid rgba(255, 255, 255, 0.5); }
+        .cart-btn:hover { background: rgba(255, 255, 255, 0.1); border-color: white; }
+        .buy-btn { background: var(--theme-color, #ffcc00); color: #000; border: 1px solid var(--theme-color, #ffcc00); font-weight: bold; }
+        .buy-btn:hover { background: white; border-color: white; color: black; }
 
         /* =========================================
-           RIGHT SIDEBAR (Interactive Vertical Menu)
+           CART MODAL STYLES
+        ========================================= */
+        .modal-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.85); z-index: 1000; justify-content: center; align-items: center;
+            backdrop-filter: blur(5px);
+        }
+        .modal-content {
+            background-color: #0c1015; padding: 40px; border-radius: 10px; width: 500px;
+            max-width: 90%; position: relative; border: 1px solid var(--theme-color);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+        }
+        .close-btn {
+            position: absolute; top: 15px; right: 25px; font-size: 30px; cursor: pointer; color: #a0aabf; transition: 0.3s;
+        }
+        .close-btn:hover { color: var(--theme-color); }
+        .cart-item-row {
+            display: flex; justify-content: space-between; padding: 15px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1); align-items: center;
+        }
+        .cart-item-name { font-family: 'Oswald', sans-serif; color: white; font-size: 1.1rem; }
+        .cart-item-price { color: var(--theme-color); font-weight: bold; }
+
+        /* =========================================
+           RIGHT SIDEBAR
         ========================================= */
         .right-sidebar {
-            width: 80px; height: 100vh; background: rgba(10, 12, 16, 0.95);
-            border-left: 1px solid rgba(255, 255, 255, 0.05);
-            display: flex; flex-direction: column; align-items: center;
-            z-index: 50; position: relative;
+            width: 80px; height: 100vh; background: rgba(10, 12, 16, 0.95); border-left: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex; flex-direction: column; align-items: center; z-index: 50; position: relative;
         }
-        
-        .v-nav-item {
-            width: 100%; height: 160px; display: flex; align-items: center; justify-content: center;
-            cursor: pointer; transition: background-color 0.4s ease, color 0.4s ease;
-        }
-
-        .v-text {
-            writing-mode: vertical-rl; transform: rotate(180deg); font-family: 'Oswald', sans-serif;
-            font-size: 0.8rem; letter-spacing: 5px; color: var(--text-light); pointer-events: none;
-        }
-
+        .v-nav-item { width: 100%; height: 160px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.4s ease; }
+        .v-text { writing-mode: vertical-rl; transform: rotate(180deg); font-family: 'Oswald', sans-serif; font-size: 0.8rem; letter-spacing: 5px; color: var(--text-light); pointer-events: none; }
         .v-nav-item:hover .v-text { color: white; }
         .v-nav-item.active-v-nav { background-color: var(--theme-color); }
         .v-nav-item.active-v-nav .v-text { color: var(--bg-darker); font-weight: 700; }
@@ -349,6 +349,7 @@
     </audio>
     <button id="music-btn" onclick="toggleMusic()">🎵 PLAY THEME</button>
 
+    <!-- LEFT SIDEBAR -->
     <aside class="left-sidebar">
         <div class="brand-logo">MARVEL</div>
         <div class="thumbnail-list">
@@ -402,11 +403,16 @@
     <main class="main-content">
         
         <div class="top-right-logo">
-            <img src="{{ url_for('static', filename='marvel_logo.png') }}" alt="Marvel Logo" onerror="this.style.display='none'">
+            <img src="{{ url_for('static', filename='avenger.jpg') }}" alt="Marvel Logo" onerror="this.style.display='none'">
         </div>
 
-        <a href="/signup" class="signup-btn">SIGN UP</a>
+        <!-- NEW TOP ACTIONS (CART & LOGIN) -->
+        <div class="top-actions">
+            <a class="cart-btn-top" onclick="toggleCartModal(true)">🛒 CART (<span id="cart-count">0</span>)</a>
+            <a href="/signup" id="auth-btn" class="signup-btn">SIGN UP</a>
+        </div>
 
+        <!-- TAB 1: PORTADA -->
         <div id="master-portada" class="master-tab active-master">
             <div class="diagonal-accent accent-1"></div>
             
@@ -427,7 +433,7 @@
                 </div>
                 <div class="feature-content">
                     <h2 class="section-header big-header">OFFICIAL ARCHIVES<br><span>DATABASE LOADED</span></h2>
-                    <p class="section-text" id="detail-synopsis">After a life-threatening incident, Tony Stark creates a mechanized suit of armor to save his own life and escape captivity. He continues to refine his technology, fighting foes in a high-tech suit equipped with advanced flight capabilities, repulsor rays, and cutting-edge weaponry.</p>
+                    <p class="section-text" id="detail-synopsis">After a life-threatening incident, Tony Stark creates a mechanized suit of armor to save his own life and escape captivity. He continues to refine his technology, fighting foes in a high-tech suit equipped with advanced flight capabilities.</p>
                     <button class="action-btn">FULL STORY</button>
                 </div>
             </div>
@@ -492,6 +498,7 @@
             </div>
         </div>
 
+        <!-- TAB 2: HISTORIA -->
         <div id="master-historia" class="master-tab">
             <div class="full-page-content">
                 <h1 class="character-title"><span class="title-bold">COMIC</span><span class="title-light">ORIGIN</span></h1>
@@ -502,12 +509,14 @@
             </div>
         </div>
 
+        <!-- TAB 3: POSTER -->
         <div id="master-poster" class="master-tab">
             <div class="poster-container">
                 <img class="poster-image" id="detail-poster" src="{{ url_for('static', filename='ironman_thumbnail.png') }}" alt="Movie Poster">
             </div>
         </div>
 
+        <!-- TAB 4: DISEÑO -->
         <div id="master-diseno" class="master-tab">
             <div class="full-page-content">
                 <h1 class="character-title"><span class="title-bold">TECH</span><span class="title-light">SPECS</span></h1>
@@ -524,28 +533,153 @@
             </div>
         </div>
 
+        <!-- ===================================== -->
+        <!-- TAB 5: SHOP SECTION                   -->
+        <!-- ===================================== -->
         <div id="master-shop" class="master-tab">
             <div class="shop-wrapper">
                 <div class="shop-header">
                     <h2>MARVEL GEAR</h2>
                 </div>
                 <div class="product-gallery">
+                    <!-- SHIRT 1: IRON MAN -->
                     <div class="product-item">
                         <div class="product-image-box">
                             <img src="{{ url_for('static', filename='ironman_shirt.png') }}" alt="Iron Man Tech Tee">
                         </div>
                         <div class="product-details">
                             <h3>Iron Man Tech Tee</h3>
-                            <button class="buy-btn">BUY NOW</button>
+                            <div class="product-price">₹4,500</div>
+                            <div class="button-group">
+                                <button class="cart-btn" onclick="addToCart('Iron Man Tech Tee', 4500, event)">ADD TO CART</button>
+                                <button class="buy-btn" onclick="initiatePayment(4500)">BUY NOW</button>
+                            </div>
                         </div>
                     </div>
+                    <!-- SHIRT 2: SPIDER-MAN -->
                     <div class="product-item">
                         <div class="product-image-box">
                             <img src="{{ url_for('static', filename='spidey_shirt.png') }}" alt="Spider-Man Streetwear">
                         </div>
                         <div class="product-details">
                             <h3>Spider-Man Streetwear</h3>
-                            <button class="buy-btn">BUY NOW</button>
+                            <div class="product-price">₹5,600</div>
+                            <div class="button-group">
+                                <button class="cart-btn" onclick="addToCart('Spider-Man Streetwear', 5600, event)">ADD TO CART</button>
+                                <button class="buy-btn" onclick="initiatePayment(5600)">BUY NOW</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- SHIRT 3: CAPTAIN AMERICA -->
+                    <div class="product-item">
+                        <div class="product-image-box">
+                            <img src="{{ url_for('static', filename='cap_shirt.png') }}" alt="Captain America Shield Tee">
+                        </div>
+                        <div class="product-details">
+                            <h3>Captain America Shield Tee</h3>
+                            <div class="product-price">₹4,800</div>
+                            <div class="button-group">
+                                <button class="cart-btn" onclick="addToCart('Captain America Shield Tee', 4800, event)">ADD TO CART</button>
+                                <button class="buy-btn" onclick="initiatePayment(4800)">BUY NOW</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- SHIRT 4: LOKI -->
+                    <div class="product-item">
+                        <div class="product-image-box">
+                            <img src="{{ url_for('static', filename='loki_shirt.png') }}" alt="God of Mischief Hoodie">
+                        </div>
+                        <div class="product-details">
+                            <h3>God of Mischief Hoodie</h3>
+                            <div class="product-price">₹5,500</div>
+                            <div class="button-group">
+                                <button class="cart-btn" onclick="addToCart('God of Mischief Hoodie', 5500, event)">ADD TO CART</button>
+                                <button class="buy-btn" onclick="initiatePayment(5500)">BUY NOW</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- SHIRT 5: THOR -->
+                    <div class="product-item">
+                        <div class="product-image-box">
+                            <img src="{{ url_for('static', filename='thor_shirt.png') }}" alt="Thor Stormbreaker Tee">
+                        </div>
+                        <div class="product-details">
+                            <h3>Thor Stormbreaker Tee</h3>
+                            <div class="product-price">₹4,200</div>
+                            <div class="button-group">
+                                <button class="cart-btn" onclick="addToCart('Thor Stormbreaker Tee', 4200, event)">ADD TO CART</button>
+                                <button class="buy-btn" onclick="initiatePayment(4200)">BUY NOW</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- SHIRT 6: HULK -->
+                    <div class="product-item">
+                        <div class="product-image-box">
+                            <img src="{{ url_for('static', filename='hulk_shirt.png') }}" alt="Hulk Gamma Graphic Tee">
+                        </div>
+                        <div class="product-details">
+                            <h3>Hulk Gamma Graphic Tee</h3>
+                            <div class="product-price">₹4,000</div>
+                            <div class="button-group">
+                                <button class="cart-btn" onclick="addToCart('Hulk Gamma Graphic Tee', 4000, event)">ADD TO CART</button>
+                                <button class="buy-btn" onclick="initiatePayment(4000)">BUY NOW</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- SHIRT 7: SCARLET WITCH -->
+                    <div class="product-item">
+                        <div class="product-image-box">
+                            <img src="{{ url_for('static', filename='scarlet_witch_shirt.png') }}" alt="Scarlet Witch Chaos Hoodie">
+                        </div>
+                        <div class="product-details">
+                            <h3>Scarlet Witch Chaos Hoodie</h3>
+                            <div class="product-price">₹5,800</div>
+                            <div class="button-group">
+                                <button class="cart-btn" onclick="addToCart('Scarlet Witch Chaos Hoodie', 5800, event)">ADD TO CART</button>
+                                <button class="buy-btn" onclick="initiatePayment(5800)">BUY NOW</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- SHIRT 8: DR. STRANGE -->
+                    <div class="product-item">
+                        <div class="product-image-box">
+                            <img src="{{ url_for('static', filename='dr_strange_shirt.png') }}" alt="Sanctum Sanctorum Cloak Tee">
+                        </div>
+                        <div class="product-details">
+                            <h3>Sanctum Sanctorum Cloak Tee</h3>
+                            <div class="product-price">₹4,900</div>
+                            <div class="button-group">
+                                <button class="cart-btn" onclick="addToCart('Sanctum Sanctorum Cloak Tee', 4900, event)">ADD TO CART</button>
+                                <button class="buy-btn" onclick="initiatePayment(4900)">BUY NOW</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- SHIRT 9: HAWKEYE -->
+                    <div class="product-item">
+                        <div class="product-image-box">
+                            <img src="{{ url_for('static', filename='hawkeye_shirt.png') }}" alt="Hawkeye Bullseye Longsleeve">
+                        </div>
+                        <div class="product-details">
+                            <h3>Hawkeye Bullseye Longsleeve</h3>
+                            <div class="product-price">₹4,300</div>
+                            <div class="button-group">
+                                <button class="cart-btn" onclick="addToCart('Hawkeye Bullseye Longsleeve', 4300, event)">ADD TO CART</button>
+                                <button class="buy-btn" onclick="initiatePayment(4300)">BUY NOW</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- SHIRT 10: THANOS -->
+                    <div class="product-item">
+                        <div class="product-image-box">
+                            <img src="{{ url_for('static', filename='thanos_shirt.png') }}" alt="Infinity Gauntlet Heavy Tee">
+                        </div>
+                        <div class="product-details">
+                            <h3>Infinity Gauntlet Heavy Tee</h3>
+                            <div class="product-price">₹6,000</div>
+                            <div class="button-group">
+                                <button class="cart-btn" onclick="addToCart('Infinity Gauntlet Heavy Tee', 6000, event)">ADD TO CART</button>
+                                <button class="buy-btn" onclick="initiatePayment(6000)">BUY NOW</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -554,6 +688,7 @@
 
     </main>
 
+    <!-- RIGHT SIDEBAR -->
     <aside class="right-sidebar">
         <div id="v-nav-portada" class="v-nav-item active-v-nav" onclick="switchRightTab(event, 'portada')">
             <span class="v-text">PORTADA</span>
@@ -572,6 +707,29 @@
         </div>
     </aside>
 
+    <!-- ===================================== -->
+    <!-- CART POPUP MODAL                      -->
+    <!-- ===================================== -->
+    <div id="cart-modal" class="modal-overlay">
+        <div class="modal-content">
+            <span class="close-btn" onclick="toggleCartModal(false)">&times;</span>
+            <h2 style="font-family: 'Oswald', sans-serif; font-size: 2rem; color: var(--theme-color); letter-spacing: 2px; margin-bottom: 0;">YOUR ARMORY</h2>
+            <p style="color: var(--text-light); margin-top: 5px; margin-bottom: 20px;">Review your gear before deployment.</p>
+            
+            <div id="cart-items-container" style="max-height: 300px; overflow-y: auto; padding-right: 10px;">
+                <!-- JavaScript will inject items here -->
+            </div>
+            
+            <div style="margin-top: 25px; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 20px; display: flex; justify-content: space-between; align-items: center;">
+                <h3 style="font-family: 'Oswald', sans-serif; font-size: 1.5rem; color: white;">TOTAL: <span id="cart-total-price">₹0</span></h3>
+                <button class="buy-btn" style="width: auto; padding: 12px 30px;" onclick="checkoutCart()">CHECKOUT</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================================== -->
+    <!-- JAVASCRIPT                            -->
+    <!-- ===================================== -->
     <script>
         const characters = {
             'spiderman': {
@@ -690,7 +848,6 @@
             const char = characters[id];
             if (!char) return;
 
-            // 1. Update text fields across all tabs
             document.getElementById('title-first').innerText = char.titleFirst;
             document.getElementById('title-second').innerText = char.titleSecond;
             document.getElementById('detail-synopsis').innerText = char.synopsis;
@@ -699,7 +856,6 @@
             document.getElementById('detail-abilities').innerText = char.abilities;
             document.getElementById('detail-poster').src = char.poster;
             
-            // 2. Animate and swap ALL three images on the long-scroll page
             const heroImg = document.getElementById('detail-image');
             const featureImg = document.getElementById('feature-image');
             const centerImg = document.getElementById('center-image');
@@ -710,7 +866,7 @@
 
             setTimeout(() => {
                 heroImg.src = char.image;
-                featureImg.src = char.poster; // Using poster for the feature block
+                featureImg.src = char.poster;
                 centerImg.src = char.image;
                 
                 heroImg.style.opacity = 1; heroImg.style.transform = 'scale(1) translateX(0)';
@@ -718,19 +874,15 @@
                 centerImg.style.opacity = 1; centerImg.style.transform = 'scale(1)';
             }, 300);
 
-            // 3. Update the global theme colors
             document.body.className = char.theme;
 
-            // 4. Update the active state in the left thumbnail sidebar
             document.querySelectorAll('.thumb-item').forEach(t => t.classList.remove('active'));
             document.getElementById('thumb-' + id).classList.add('active');
 
-            // 5. Instantly jump back to the top of the Portada tab if they switched characters
             document.getElementById('v-nav-portada').click();
             document.getElementById('master-portada').scrollTo(0, 0); 
         }
 
-        // Handles the Right-Sidebar clicks to show/hide the different Master pages
         function switchRightTab(event, masterId) {
             document.querySelectorAll('.v-nav-item').forEach(item => item.classList.remove('active-v-nav'));
             event.currentTarget.classList.add('active-v-nav');
@@ -739,7 +891,6 @@
             document.getElementById('master-' + masterId).classList.add('active-master');
         }
 
-        // Handles the Music button
         function toggleMusic() {
             const audio = document.getElementById('theme-song');
             const btn = document.getElementById('music-btn');
@@ -749,6 +900,137 @@
                 audio.pause(); btn.innerText = "🎵 PLAY THEME"; btn.classList.remove("playing");
             }
         }
+
+        // =====================================
+        // CART LOGIC
+        // =====================================
+        let cart = []; // Stores our items
+
+        function addToCart(itemName, itemPrice, event) {
+            cart.push({ name: itemName, price: itemPrice });
+            document.getElementById('cart-count').innerText = cart.length;
+
+            const btn = event.target;
+            const originalText = btn.innerText;
+            btn.innerText = "ADDED ✓";
+            btn.style.borderColor = "#39ff14"; 
+            btn.style.color = "#39ff14";
+            
+            setTimeout(() => {
+                btn.innerText = originalText;
+                btn.style.borderColor = "rgba(255, 255, 255, 0.5)";
+                btn.style.color = "white";
+            }, 1500);
+        }
+
+        function toggleCartModal(show) {
+            const modal = document.getElementById('cart-modal');
+            modal.style.display = show ? 'flex' : 'none';
+            if (show) {
+                renderCart();
+            }
+        }
+
+        function renderCart() {
+            const container = document.getElementById('cart-items-container');
+            const totalEl = document.getElementById('cart-total-price');
+            
+            container.innerHTML = ''; 
+            let totalAmount = 0;
+
+            if (cart.length === 0) {
+                container.innerHTML = '<p style="color: #a0aabf; font-style: italic;">Your armory is currently empty. Visit the shop to add gear.</p>';
+            } else {
+                cart.forEach(item => {
+                    totalAmount += item.price;
+                    container.innerHTML += `
+                        <div class="cart-item-row">
+                            <span class="cart-item-name">${item.name}</span>
+                            <span class="cart-item-price">₹${item.price}</span>
+                        </div>
+                    `;
+                });
+            }
+            
+            totalEl.innerText = '₹' + totalAmount;
+        }
+
+        function checkoutCart() {
+            if (cart.length === 0) {
+                alert("Your cart is empty! Go add some gear first.");
+                return;
+            }
+            
+            let totalAmount = cart.reduce((sum, item) => sum + item.price, 0);
+            toggleCartModal(false);
+            initiatePayment(totalAmount);
+        }
+
+        // =====================================
+        // PAYMENT LOGIC
+        // =====================================
+        async function initiatePayment(amount) {
+            const response = await fetch('/create-order', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ amount: amount })
+            });
+            const order = await response.json();
+
+            const options = {
+                "key": "YOUR_RAZORPAY_KEY_ID",
+                "amount": order.amount,
+                "currency": "INR",
+                "order_id": order.id,
+                "handler": function (response) {
+                    alert("Payment Successful! Payment ID: " + response.razorpay_payment_id);
+                    cart = []; // Empty the cart after successful purchase
+                    document.getElementById('cart-count').innerText = "0";
+                }
+            };
+            const rzp = new Razorpay(options);
+            rzp.open();
+        }
+
+        // =====================================
+        // LOGIN CHECK
+        // =====================================
+        document.addEventListener("DOMContentLoaded", async function() {
+            const token = localStorage.getItem('token');
+            const authBtn = document.getElementById('auth-btn');
+
+            if (token && authBtn) {
+                authBtn.href = "#"; 
+                authBtn.innerText = "MY ACCOUNT"; 
+
+                try {
+                    const response = await fetch('/profile', { 
+                        method: 'GET',
+                        headers: { 
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer ' + token 
+                        }
+                    });
+                    
+                    if (response.ok) {
+                        const userData = await response.json();
+                        if (userData.username) {
+                            authBtn.innerText = "HI, " + userData.username.toUpperCase();
+                        }
+                    }
+                } catch (error) {
+                    console.log("Could not fetch username, using default text.");
+                }
+
+                authBtn.onclick = function(e) {
+                    e.preventDefault();
+                    if(confirm("Would you like to log out?")) {
+                        localStorage.removeItem('token'); 
+                        window.location.reload(); 
+                    }
+                };
+            }
+        });
     </script>
 </body>
 </html>

@@ -309,19 +309,49 @@ body.theme-loki { --theme-color: #2e7d32; }
     letter-spacing: 1px;
 }
 
-.buy-btn {
-    background-color: transparent;
-    color: white;
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    padding: 10px 20px;
-    font-family: 'Oswald', sans-serif;
-    letter-spacing: 2px;
-    cursor: pointer;
-    transition: 0.3s;
-    width: 100%; /* Makes button fill the bottom of the card */
+/* =========================================
+   SHOP BUTTONS
+========================================= */
+.button-group {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    margin-top: 15px;
 }
 
+.cart-btn, .buy-btn {
+    flex: 1; /* Makes both buttons take up exactly 50% of the space */
+    padding: 10px 0;
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: 0.3s;
+    border-radius: 4px;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+/* The Add to Cart Button (Outlined) */
+.cart-btn {
+    background: transparent;
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+.cart-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: white;
+}
+
+/* The Buy Now Button (Solid Theme Color) */
+.buy-btn {
+    background: var(--theme-color, #ffcc00);
+    color: #000;
+    border: 1px solid var(--theme-color, #ffcc00);
+    font-weight: bold;
+}
 .buy-btn:hover {
-    background-color: white;
+    background: white;
+    border-color: white;
     color: black;
 }

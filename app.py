@@ -109,23 +109,44 @@ def get_character(char_key):
 # User Profile API
 # -----------------------------
 
-@app.route("/profile")
+@app.route("/profile", methods=["GET"])
 def get_profile():
     try:
-        user_id = request.headers.get("Authorization")
+        # 1. Safely get the Authorization header
+        auth_header = request.headers.get("Authorization")
+        if not auth_header or not auth_header.startswith("Bearer "):
+            return jsonify({"error": "No token provided"}), 401
 
+        # 2. Extract just the token part
+        token = auth_header.split(" ")[1]
+
+        # 3. Ask Supabase to verify the token and get the user
+        user_response = supabase.auth.get_user(token)
+        if not user_response or not user_response.user:
+            return jsonify({"error": "Invalid token"}), 401
+            
+        user_id = user_response.user.id
+
+        # 4. Look up their profile in the database
         profile = (
             supabase
             .table("profiles")
-            .select("*")
+            .select("username")
             .eq("id", user_id)
             .execute()
         )
 
-        return jsonify(profile.data)
+        # 5. Return the username (or a default name if they haven't set one yet)
+        if profile.data and len(profile.data) > 0:
+            username = profile.data[0].get("username")
+            if not username:
+                username = "HERO" # Fallback if username column is empty
+            return jsonify({"username": username}), 200
+        else:
+            return jsonify({"username": "HERO"}), 200
 
     except Exception as e:
-        return jsonify({"error": str(e)}), 400
+        return jsonify({"error": "Unauthorized or Token Expired"}), 401
 
 
 # -----------------------------
