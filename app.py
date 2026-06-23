@@ -1,12 +1,12 @@
 import os
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, redirect, url_for
 from supabase import create_client, Client
 from dotenv import load_dotenv
 
 # Load environment variables
 load_dotenv()
 
-# Flask app
+# Flask app setup
 app = Flask(
     __name__,
     template_folder="templates",
@@ -17,146 +17,142 @@ app = Flask(
 SUPABASE_URL = os.environ.get("SUPABASE_URL")
 SUPABASE_KEY = os.environ.get("SUPABASE_KEY")
 
+if not SUPABASE_URL or not SUPABASE_KEY:
+    print("WARNING: Supabase credentials are missing from your .env file!")
+
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 # -----------------------------
-# Page Routes
+# Page Routes & Standard Auth
 # -----------------------------
 
 @app.route("/")
 def home():
     return render_template("index.html")
 
+@app.route("/signup", methods=["GET", "POST"])
+def signup():
+    if request.method == "POST":
+        email = request.form.get("email")
+        password = request.form.get("password")
+        name = request.form.get("name") # Included from your new UI
+        
+        try:
+            # Note: Storing 'name' requires setting up user metadata in Supabase, 
+            # but this handles the core email/password creation perfectly.
+            response = supabase.auth.sign_up({
+                "email": email,
+                "password": password
+            })
+            return redirect(url_for("login"))
+            
+        except Exception as e:
+            return render_template("signup.html", error=str(e))
 
-@app.route("/signup")
-def signup_page():
+    return render_template("signup.html")
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+        email = request.form.get("email")
+        password = request.form.get("password")
+        
+        try:
+            response = supabase.auth.sign_in_with_password({
+                "email": email,
+                "password": password
+            })
+            token = response.session.access_token
+            
+            # Save token to localStorage and redirect home
+            return f"""
+            <script>
+                localStorage.setItem('token', '{token}');
+                window.location.href = '/';
+            </script>
+            """
+        except Exception as e:
+            return render_template("login.html", error=str(e))
+
     return render_template("login.html")
 
-
 # -----------------------------
-# Authentication APIs
+# Social Login (OAuth) Routes
 # -----------------------------
 
-@app.route("/signup", methods=["POST"])
-def signup():
+@app.route('/login/oauth/<provider>')
+def oauth_login(provider):
     try:
-        data = request.get_json()
-
-        response = supabase.auth.sign_up(
-            {
-                "email": data["email"],
-                "password": data["password"]
+        response = supabase.auth.sign_in_with_oauth({
+            "provider": provider,
+            "options": {
+                "redirect_to": "http://127.0.0.1:5000/auth/callback" 
             }
-        )
-
-        message = (
-            "Check your email for confirmation"
-            if response.user
-            else "Sign up successful"
-        )
-
-        return jsonify({"message": message}), 200
-
+        })
+        return redirect(response.url)
     except Exception as e:
-        return jsonify({"error": str(e)}), 400
+        return f"OAuth Routing Error: {str(e)}"
 
-
-@app.route("/login", methods=["POST"])
-def login():
-    try:
-        data = request.get_json()
-
-        response = supabase.auth.sign_in_with_password(
-            {
-                "email": data["email"],
-                "password": data["password"]
-            }
-        )
-
-        return jsonify(
-            {
-                "token": response.session.access_token,
-                "user": response.user.email
-            }
-        ), 200
-
-    except Exception as e:
-        return jsonify({"error": str(e)}), 400
-
+@app.route('/auth/callback')
+def auth_callback():
+    code = request.args.get('code')
+    if code:
+        try:
+            response = supabase.auth.exchange_code_for_session({"auth_code": code})
+            token = response.session.access_token
+            
+            return f"""
+            <script>
+                localStorage.setItem('token', '{token}');
+                window.location.href = '/';
+            </script>
+            """
+        except Exception as e:
+            return f"Authentication Failed: {str(e)}"
+            
+    return "Error: No authorization code received.", 400
 
 # -----------------------------
-# Character API
-# -----------------------------
-
-@app.route("/api/get_character/<char_key>")
-def get_character(char_key):
-    try:
-        response = (
-            supabase
-            .table("characters")
-            .select("*")
-            .eq("char_key", char_key)
-            .execute()
-        )
-
-        return jsonify(response.data)
-
-    except Exception as e:
-        return jsonify({"error": str(e)}), 400
-
-
-# -----------------------------
-# User Profile API
+# Core APIs
 # -----------------------------
 
 @app.route("/profile", methods=["GET"])
 def get_profile():
     try:
-        # 1. Safely get the Authorization header
         auth_header = request.headers.get("Authorization")
         if not auth_header or not auth_header.startswith("Bearer "):
             return jsonify({"error": "No token provided"}), 401
 
-        # 2. Extract just the token part
         token = auth_header.split(" ")[1]
-
-        # 3. Ask Supabase to verify the token and get the user
         user_response = supabase.auth.get_user(token)
+        
         if not user_response or not user_response.user:
             return jsonify({"error": "Invalid token"}), 401
             
         user_id = user_response.user.id
 
-        # 4. Look up their profile in the database
-        profile = (
-            supabase
-            .table("profiles")
-            .select("username")
-            .eq("id", user_id)
-            .execute()
-        )
+        profile = supabase.table("profiles").select("username").eq("id", user_id).execute()
 
-        # 5. Return the username (or a default name if they haven't set one yet)
         if profile.data and len(profile.data) > 0:
             username = profile.data[0].get("username")
-            if not username:
-                username = "HERO" # Fallback if username column is empty
-            return jsonify({"username": username}), 200
+            return jsonify({"username": username if username else "HERO"}), 200
         else:
             return jsonify({"username": "HERO"}), 200
 
     except Exception as e:
         return jsonify({"error": "Unauthorized or Token Expired"}), 401
 
-
-# -----------------------------
-# Health Check
-# -----------------------------
+@app.route("/api/get_character/<char_key>")
+def get_character(char_key):
+    try:
+        response = supabase.table("characters").select("*").eq("char_key", char_key).execute()
+        return jsonify(response.data)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
 
 @app.route("/health")
 def health():
     return jsonify({"status": "ok"}), 200
-
 
 # -----------------------------
 # Run App

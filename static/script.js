@@ -116,7 +116,6 @@ function selectCharacter(id) {
     const char = characters[id];
     if (!char) return;
 
-    // 1. Update text fields across all tabs
     document.getElementById('title-first').innerText = char.titleFirst;
     document.getElementById('title-second').innerText = char.titleSecond;
     document.getElementById('detail-synopsis').innerText = char.synopsis;
@@ -125,7 +124,6 @@ function selectCharacter(id) {
     document.getElementById('detail-abilities').innerText = char.abilities;
     document.getElementById('detail-poster').src = char.poster;
     
-    // 2. Animate and swap ALL three images on the long-scroll page
     const heroImg = document.getElementById('detail-image');
     const featureImg = document.getElementById('feature-image');
     const centerImg = document.getElementById('center-image');
@@ -136,7 +134,7 @@ function selectCharacter(id) {
 
     setTimeout(() => {
         heroImg.src = char.image;
-        featureImg.src = char.poster; // Using poster for the feature block
+        featureImg.src = char.poster;
         centerImg.src = char.image;
         
         heroImg.style.opacity = 1; heroImg.style.transform = 'scale(1) translateX(0)';
@@ -144,19 +142,15 @@ function selectCharacter(id) {
         centerImg.style.opacity = 1; centerImg.style.transform = 'scale(1)';
     }, 300);
 
-    // 3. Update the global theme colors
     document.body.className = char.theme;
 
-    // 4. Update the active state in the left thumbnail sidebar
     document.querySelectorAll('.thumb-item').forEach(t => t.classList.remove('active'));
     document.getElementById('thumb-' + id).classList.add('active');
 
-    // 5. Instantly jump back to the top of the Portada tab if they switched characters
     document.getElementById('v-nav-portada').click();
     document.getElementById('master-portada').scrollTo(0, 0); 
 }
 
-// Handles the Right-Sidebar clicks to show/hide the different Master pages
 function switchRightTab(event, masterId) {
     document.querySelectorAll('.v-nav-item').forEach(item => item.classList.remove('active-v-nav'));
     event.currentTarget.classList.add('active-v-nav');
@@ -165,7 +159,6 @@ function switchRightTab(event, masterId) {
     document.getElementById('master-' + masterId).classList.add('active-master');
 }
 
-// Handles the Music button
 function toggleMusic() {
     const audio = document.getElementById('theme-song');
     const btn = document.getElementById('music-btn');
@@ -176,58 +169,176 @@ function toggleMusic() {
     }
 }
 
-// Handle adding items to the cart
-function addToCart(itemName) {
-    alert(itemName + " has been added to your cart!");
-    const btn = event.target;
-    const originalText = btn.innerText;
-    btn.innerText = "ADDED ✓";
-    btn.style.borderColor = "#39ff14"; // Turn border green
-    btn.style.color = "#39ff14";
+// =========================================================================
+// CLOUD CART LOGIC (Supabase + LocalStorage Fallback)
+// =========================================================================
+let cart = []; 
+
+document.addEventListener("DOMContentLoaded", async () => {
+    await fetchCloudCart();
+    checkLoginStatus();
+});
+
+async function fetchCloudCart() {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        cart = JSON.parse(localStorage.getItem('marvelCart')) || [];
+        updateCartCountDisplay();
+        return;
+    }
+
+    try {
+        const response = await fetch('/api/cart', {
+            method: 'GET',
+            headers: { 'Authorization': 'Bearer ' + token }
+        });
+
+        if (response.ok) {
+            const dbCart = await response.json();
+            cart = dbCart.map(item => ({ name: item.item_name, price: item.item_price }));
+            updateCartCountDisplay();
+        }
+    } catch (err) {
+        console.error("Critical issue syncing state with Cloud Storage database:", err);
+    }
+}
+
+async function addToCart(itemName, itemPrice, event) {
+    const token = localStorage.getItem('token');
+    
+    cart.push({ name: itemName, price: itemPrice });
+    updateCartCountDisplay();
+
+    const buttonElement = event.target;
+    const originalLabel = buttonElement.innerText;
+    buttonElement.innerText = "ADDED ✓";
+    buttonElement.style.borderColor = "#39ff14"; 
+    buttonElement.style.color = "#39ff14";
     
     setTimeout(() => {
-        btn.innerText = originalText;
-        btn.style.borderColor = "rgba(255, 255, 255, 0.5)";
-        btn.style.color = "white";
-    }, 2000);
+        buttonElement.innerText = originalLabel;
+        buttonElement.style.borderColor = "rgba(255, 255, 255, 0.5)";
+        buttonElement.style.color = "white";
+    }, 1500);
+
+    if (token) {
+        await fetch('/api/cart', {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token 
+            },
+            body: JSON.stringify({ name: itemName, price: itemPrice })
+        });
+    } else {
+        localStorage.setItem('marvelCart', JSON.stringify(cart));
+    }
 }
 
-// Handle Razorpay Payment
+async function clearCart() {
+    const token = localStorage.getItem('token');
+    cart = [];
+    updateCartCountDisplay();
+    renderCartViewModal();
+
+    if (token) {
+        await fetch('/api/cart', {
+            method: 'DELETE',
+            headers: { 'Authorization': 'Bearer ' + token }
+        });
+    } else {
+        localStorage.removeItem('marvelCart');
+    }
+}
+
+function updateCartCountDisplay() {
+    const countBadge = document.getElementById('cart-count');
+    if (countBadge) countBadge.innerText = cart.length;
+}
+
+function toggleCartModal(show) {
+    const modal = document.getElementById('cart-modal');
+    if (modal) {
+        modal.style.display = show ? 'flex' : 'none';
+        if (show) renderCartViewModal();
+    }
+}
+
+function renderCartViewModal() {
+    const container = document.getElementById('cart-items-container');
+    const totalEl = document.getElementById('cart-total-price');
+    
+    if (!container || !totalEl) return;
+    
+    container.innerHTML = ''; 
+    let totalAmount = 0;
+
+    if (cart.length === 0) {
+        container.innerHTML = '<p style="color: #a0aabf; font-style: italic;">Your armory is currently empty. Visit the shop to add gear.</p>';
+    } else {
+        cart.forEach(item => {
+            totalAmount += item.price;
+            container.innerHTML += `
+                <div class="cart-item-row" style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                    <span class="cart-item-name">${item.name}</span>
+                    <span class="cart-item-price">₹${item.price}</span>
+                </div>
+            `;
+        });
+        
+        container.innerHTML += `
+            <button onclick="clearCart()" style="background: transparent; color: #ff4d4d; border: none; cursor: pointer; padding: 8px 0; margin-top: 8px; font-weight: bold; font-family: 'Oswald', sans-serif;">Empty Cart</button>
+        `;
+    }
+    
+    totalEl.innerText = '₹' + totalAmount;
+}
+
+function checkoutCart() {
+    if (cart.length === 0) {
+        alert("Your cart is empty! Go add some gear first.");
+        return;
+    }
+    let totalAmount = cart.reduce((sum, item) => sum + item.price, 0);
+    toggleCartModal(false);
+    initiatePayment(totalAmount);
+}
+
+// =====================================
+// PHONEPE PAYMENT LOGIC
+// =====================================
 async function initiatePayment(amount) {
-    // 1. Get Order ID from your Flask backend
-    const response = await fetch('/create-order', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ amount: amount })
-    });
-    const order = await response.json();
+    try {
+        const response = await fetch('/create-order', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ amount: amount })
+        });
+        
+        const data = await response.json();
 
-    // 2. Configure Razorpay options
-    const options = {
-        "key": "YOUR_RAZORPAY_KEY_ID", // Add your real Razorpay key here when ready!
-        "amount": order.amount,
-        "currency": "INR",
-        "order_id": order.id,
-        "handler": function (response) {
-            alert("Payment Successful! Payment ID: " + response.razorpay_payment_id);
-            // Redirect or update UI here
+        if (data.url) {
+            window.location.href = data.url; 
+        } else {
+            alert("Error creating order: " + (data.error || "Unknown error"));
         }
-    };
-    const rzp = new Razorpay(options);
-    rzp.open();
+    } catch (err) {
+        alert("Could not connect to PhonePe.");
+        console.error(err);
+    }
 }
 
-// Check Login Status on Page Load
-document.addEventListener("DOMContentLoaded", async function() {
+// =====================================
+// LOGIN CHECK
+// =====================================
+async function checkLoginStatus() {
     const token = localStorage.getItem('token');
     const authBtn = document.getElementById('auth-btn');
 
     if (token && authBtn) {
-        // Change the button so it doesn't take them to the signup page anymore
         authBtn.href = "#"; 
         authBtn.innerText = "MY ACCOUNT"; 
 
-        // Fetch the actual user's name from your database
         try {
             const response = await fetch('/profile', { 
                 method: 'GET',
@@ -247,13 +358,12 @@ document.addEventListener("DOMContentLoaded", async function() {
             console.log("Could not fetch username, using default text.");
         }
 
-        // Add Logout Functionality
         authBtn.onclick = function(e) {
             e.preventDefault();
             if(confirm("Would you like to log out?")) {
-                localStorage.removeItem('token'); // Delete the token
-                window.location.reload(); // Refresh to show "SIGN UP" again
+                localStorage.removeItem('token'); 
+                window.location.reload(); 
             }
         };
     }
-});
+}
