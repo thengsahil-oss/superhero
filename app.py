@@ -35,21 +35,21 @@ def signup():
     if request.method == "POST":
         email = request.form.get("email")
         password = request.form.get("password")
-        name = request.form.get("name") # Included from your new UI
+        name = request.form.get("name") 
         
         try:
-            # Note: Storing 'name' requires setting up user metadata in Supabase, 
-            # but this handles the core email/password creation perfectly.
             response = supabase.auth.sign_up({
                 "email": email,
                 "password": password
             })
+            # Redirect to login page after successful signup
             return redirect(url_for("login"))
             
         except Exception as e:
             return render_template("signup.html", error=str(e))
 
     return render_template("signup.html")
+
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -75,42 +75,6 @@ def login():
             return render_template("login.html", error=str(e))
 
     return render_template("login.html")
-
-# -----------------------------
-# Social Login (OAuth) Routes
-# -----------------------------
-
-@app.route('/login/oauth/<provider>')
-def oauth_login(provider):
-    try:
-        response = supabase.auth.sign_in_with_oauth({
-            "provider": provider,
-            "options": {
-                "redirect_to": "http://127.0.0.1:5000/auth/callback" 
-            }
-        })
-        return redirect(response.url)
-    except Exception as e:
-        return f"OAuth Routing Error: {str(e)}"
-
-@app.route('/auth/callback')
-def auth_callback():
-    code = request.args.get('code')
-    if code:
-        try:
-            response = supabase.auth.exchange_code_for_session({"auth_code": code})
-            token = response.session.access_token
-            
-            return f"""
-            <script>
-                localStorage.setItem('token', '{token}');
-                window.location.href = '/';
-            </script>
-            """
-        except Exception as e:
-            return f"Authentication Failed: {str(e)}"
-            
-    return "Error: No authorization code received.", 400
 
 # -----------------------------
 # Core APIs
@@ -142,6 +106,7 @@ def get_profile():
     except Exception as e:
         return jsonify({"error": "Unauthorized or Token Expired"}), 401
 
+
 @app.route("/api/get_character/<char_key>")
 def get_character(char_key):
     try:
@@ -150,13 +115,10 @@ def get_character(char_key):
     except Exception as e:
         return jsonify({"error": str(e)}), 400
 
+
 @app.route("/health")
 def health():
     return jsonify({"status": "ok"}), 200
-
-# -----------------------------
-# Run App
-# -----------------------------
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)

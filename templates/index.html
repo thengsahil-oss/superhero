@@ -121,24 +121,16 @@
             position: relative;
             display: flex;
             flex-direction: column;
-            background: url("{{ url_for('static', filename='marvel_background.jpg') }}") center top/cover fixed;
+            background-color: #050608;
         }
 
-        .main-content::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(to bottom, rgba(5,6,8,0.7) 0%, rgba(5,6,8,1) 100%);
-            z-index: 0;
-        }
-
-        /* Top Right Elements (Logo, Cart, Sign Up) */
+        /* Top Right Elements */
         .top-right-logo {
             position: absolute;
             top: 35px;
             right: 120px; 
             height: 25px;
-            z-index: 30;
+            z-index: 100;
         }
         .top-right-logo img { height: 100%; opacity: 0.9; }
 
@@ -190,7 +182,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Standard text styles */
         .section-header {
             font-family: 'Oswald', sans-serif;
             font-size: 1.5rem;
@@ -202,84 +193,146 @@
         .section-text { font-size: 1.1rem; line-height: 1.8; color: #cacedb; white-space: pre-wrap; max-width: 600px; }
 
         /* =========================================
-           SCROLLING LAYOUT (BATTLEFIELD STYLE)
+           NEW CINEMATIC LAYOUT (PORTADA)
         ========================================= */
-        .scroll-section { position: relative; width: 100%; min-height: 100vh; padding: 100px 8%; display: flex; align-items: center; }
-        .hero-section { justify-content: flex-start; }
+        .cinematic-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 5%;
+            box-sizing: border-box;
+            
+            background-size: contain; 
+            background-position: center bottom; 
+            background-repeat: no-repeat;
+            transition: background-image 0.5s ease;
+        }
+
+        .cinematic-container::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(90deg, rgba(5,6,8,0.95) 0%, rgba(5,6,8,0.3) 40%, rgba(5,6,8,0.3) 60%, rgba(5,6,8,0.95) 100%),
+                        linear-gradient(0deg, rgba(5,6,8,0.9) 0%, transparent 20%);
+            z-index: 1;
+        }
+
+        .movie-info-left, .movie-info-right {
+            position: relative;
+            z-index: 2;
+            color: white;
+        }
+
+        .movie-info-left {
+            max-width: 450px;
+            margin-top: 5vh;
+        }
+
+        .movie-title {
+            font-family: 'Oswald', sans-serif;
+            font-size: 6rem;
+            font-weight: 700;
+            margin: 0;
+            line-height: 1;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            text-shadow: 2px 4px 15px rgba(0,0,0,0.8);
+        }
+
+        .character-name {
+            font-size: 1rem;
+            color: var(--theme-color);
+            letter-spacing: 4px;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        .divider-line {
+            width: 150%;
+            height: 3px;
+            background-color: var(--theme-color);
+            margin: 30px 0;
+            box-shadow: 0 0 10px var(--theme-color);
+            transition: background-color 0.5s ease;
+        }
+
+        .movie-info-right {
+            max-width: 380px;
+            text-align: right;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            margin-top: 5vh;
+        }
+
+        .description-text {
+            font-size: 1rem;
+            line-height: 1.7;
+            color: #d0d0d0;
+            text-shadow: 1px 1px 5px rgba(0,0,0,0.9);
+        }
+
+        .right-line { width: 100%; margin: 30px 0; }
+
+        .circular-play-btn {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: transparent;
+            border: 2px solid var(--theme-color);
+            color: var(--theme-color);
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .circular-play-btn::after {
+            content: '';
+            position: absolute;
+            top: 5px; left: 5px; right: 5px; bottom: 5px;
+            border-radius: 50%;
+            background: var(--theme-color);
+            opacity: 0.2;
+            transition: 0.3s;
+        }
+
+        .circular-play-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 30px var(--theme-color);
+            background: var(--theme-color);
+            color: #000;
+        }
         
-        .character-title {
-            display: flex; flex-direction: column; font-family: 'Oswald', sans-serif;
-            font-size: 8rem; line-height: 0.9; margin-bottom: 30px;
-            text-transform: uppercase; letter-spacing: 5px; position: relative; z-index: 2;
-        }
-        .title-bold { font-weight: 700; color: white; }
-        .title-light { font-weight: 300; color: var(--theme-color); }
-
-        .hero-bg-cutout {
-            position: absolute; right: 5%; bottom: 0; height: 90vh; z-index: 1;
-            filter: drop-shadow(-20px 20px 30px rgba(0,0,0,0.8)); pointer-events: none;
-            transition: opacity 0.5s ease, transform 0.5s ease;
-        }
-
-        .diagonal-accent {
-            position: absolute; width: 150%; height: 200px; background: var(--theme-color);
-            transform: rotate(-15deg); z-index: 0; opacity: 0.05; transition: background 0.5s ease;
-        }
-        .accent-1 { top: 20%; left: -20%; }
-        .accent-2 { bottom: -100px; right: -20%; }
-
-        .feature-section {
-            background: rgba(255,255,255,0.02); border-top: 1px solid rgba(255,255,255,0.05);
-            border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; gap: 50px; min-height: 70vh;
-        }
-        .feature-image { flex: 1; display: flex; justify-content: center; }
-        .feature-image img { max-height: 60vh; filter: drop-shadow(0 20px 30px rgba(0,0,0,0.9)); transition: 0.5s ease; }
-        .feature-content { flex: 1; display: flex; flex-direction: column; justify-content: center; }
-        .big-header { font-size: 2.5rem; line-height: 1.1; margin-bottom: 20px; }
-        .big-header span { color: var(--theme-color); font-size: 1.2rem; display: block; letter-spacing: 5px; margin-top: 10px;}
-
-        .action-btn {
-            background: transparent; color: white; border: 1px solid var(--theme-color);
-            padding: 12px 30px; font-family: 'Oswald', sans-serif; font-size: 1rem;
-            letter-spacing: 3px; cursor: pointer; transition: all 0.3s; width: fit-content; text-transform: uppercase;
-        }
-        .action-btn:hover { background: var(--theme-color); color: black; }
-
-        .centerpiece-section { display: flex; justify-content: space-between; align-items: center; min-height: 80vh; text-align: center; }
-        .side-text-block { flex: 1; text-align: left; padding: 0 40px; }
-        .side-text-block.right { text-align: right; }
-        .side-text-block h3 { font-family: 'Oswald', sans-serif; font-size: 1.5rem; color: white; letter-spacing: 2px; margin-bottom: 15px; text-transform: uppercase; }
-        .side-text-block p { color: var(--text-light); font-size: 0.95rem; line-height: 1.6; }
-        .center-focus { flex: 1; position: relative; display: flex; justify-content: center; align-items: center; height: 600px; }
-        .center-bg-box { position: absolute; width: 250px; height: 400px; background: var(--theme-color); z-index: 1; transition: 0.5s ease; }
-        .center-focus img { position: relative; z-index: 2; height: 110%; filter: drop-shadow(0px 20px 20px rgba(0,0,0,0.8)); transition: 0.5s ease; }
-
-        .roster-section { flex-direction: column; align-items: flex-start; padding-bottom: 150px; }
-        .roster-grid { display: flex; gap: 20px; width: 100%; margin-top: 50px; justify-content: space-between; }
-        .roster-card { flex: 1; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); height: 500px; display: flex; flex-direction: column; transition: 0.3s; cursor: pointer; position: relative; overflow: hidden; }
-        .roster-card:hover { border-color: var(--theme-color); transform: translateY(-10px); background: rgba(255,255,255,0.08); }
-        .roster-card-img { height: 70%; width: 100%; background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; padding: 20px; }
-        .roster-card-img img { max-height: 100%; max-width: 100%; object-fit: contain; opacity: 0.8; transition: 0.3s; }
-        .roster-card:hover .roster-card-img img { opacity: 1; transform: scale(1.1); }
-        .roster-card-info { padding: 20px; border-top: 1px solid rgba(255,255,255,0.05); }
-        .roster-card-info h4 { font-family: 'Oswald', sans-serif; font-size: 1.2rem; color: white; letter-spacing: 2px; margin-bottom: 10px; }
-        .stat-bar { display: flex; align-items: center; margin-bottom: 5px; font-size: 0.7rem; color: var(--text-light); }
-        .stat-bar span { width: 60px; }
-        .stat-fill { flex: 1; height: 4px; background: rgba(255,255,255,0.1); margin-left: 10px; position: relative; }
-        .stat-fill::after { content: ''; position: absolute; top: 0; left: 0; height: 100%; background: var(--theme-color); transition: 0.5s ease; }
+        .circular-play-btn:hover::after { opacity: 0; }
 
         /* =========================================
            OTHER LAYOUTS & SHOP
         ========================================= */
-        .full-page-content { padding: 100px; width: 100%; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; }
+        /* Fixed syntax for VS Code: Using direct static path instead of url_for */
+        .full-page-content { padding: 100px; width: 100%; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; background: url('/static/marvel_background.jpg') center top/cover fixed;}
+        .full-page-content::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(5,6,8,0.85); z-index: 0; }
+        .full-page-content > * { position: relative; z-index: 1; }
+        
+        .character-title { display: flex; flex-direction: column; font-family: 'Oswald', sans-serif; font-size: 8rem; line-height: 0.9; margin-bottom: 30px; text-transform: uppercase; letter-spacing: 5px; }
+        .title-bold { font-weight: 700; color: white; }
+        .title-light { font-weight: 300; color: var(--theme-color); }
+
         .history-columns { display: column; column-count: 2; column-gap: 50px; margin-top: 30px; }
-        .poster-container { display: flex; justify-content: center; align-items: center; min-height: 100vh; width: 100%; }
+        .poster-container { display: flex; justify-content: center; align-items: center; min-height: 100vh; width: 100%; background: #050608; }
         .poster-image { height: 80vh; border-radius: 15px; box-shadow: 0 20px 50px rgba(0,0,0,0.9); border: 2px solid rgba(255,255,255,0.1); }
         .hud-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 40px; }
         .hud-box { background: rgba(0, 20, 40, 0.4); border: 1px solid var(--theme-color); padding: 30px; border-radius: 10px; backdrop-filter: blur(5px); }
         .hud-title { font-family: 'Oswald', sans-serif; color: white; letter-spacing: 2px; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 10px; }
 
-        .shop-wrapper { width: 100%; padding: 100px 10%; display: flex; flex-direction: column; align-items: center; }
+        .shop-wrapper { width: 100%; padding: 100px 10%; display: flex; flex-direction: column; align-items: center; background: #050608; min-height: 100vh;}
         .shop-header h2 { font-family: 'Oswald', sans-serif; font-size: 4rem; color: white; letter-spacing: 5px; margin-bottom: 40px; text-transform: uppercase; }
         .product-gallery { display: flex; justify-content: center; gap: 50px; flex-wrap: wrap; width: 100%; }
         .product-item { width: 280px; background: rgba(0,0,0,0.6); border: 1px solid var(--theme-color); border-radius: 10px; padding: 15px; display: flex; flex-direction: column; transition: transform 0.3s ease; backdrop-filter: blur(5px); }
@@ -345,56 +398,55 @@
 <body class="theme-iron_man">
 
     <audio id="theme-song" loop>
-        <source src="{{ url_for('static', filename='marvel_theme.mp3') }}" type="audio/mpeg">
+        <source src="/static/marvel_theme.mp3" type="audio/mpeg">
     </audio>
     <button id="music-btn" onclick="toggleMusic()">🎵 PLAY THEME</button>
 
-    <!-- LEFT SIDEBAR -->
     <aside class="left-sidebar">
         <div class="brand-logo">MARVEL</div>
         <div class="thumbnail-list">
             <div class="thumb-item" id="thumb-spiderman" onclick="selectCharacter('spiderman')">
-                <img src="{{ url_for('static', filename='spiderman_thumbnail.png') }}" alt="Spider-Man">
+                <img src="/static/spiderman_thumbnail.png" alt="Spider-Man">
                 <div class="thumb-overlay"></div><span class="thumb-name">SPIDER-MAN</span>
             </div>
             <div class="thumb-item" id="thumb-captain_america" onclick="selectCharacter('captain_america')">
-                <img src="{{ url_for('static', filename='cap_thumbnail.png') }}" alt="Cap">
+                <img src="/static/cap_thumbnail.png" alt="Cap">
                 <div class="thumb-overlay"></div><span class="thumb-name">CAPTAIN AMERICA</span>
             </div>
             <div class="thumb-item active" id="thumb-iron_man" onclick="selectCharacter('iron_man')">
-                <img src="{{ url_for('static', filename='ironman_thumbnail.png') }}" alt="Iron Man">
+                <img src="/static/ironman_thumbnail.png" alt="Iron Man">
                 <div class="thumb-overlay"></div><span class="thumb-name">IRON MAN</span>
             </div>
             <div class="thumb-item" id="thumb-thor" onclick="selectCharacter('thor')">
-                <img src="{{ url_for('static', filename='thor_thumbnail.png') }}" alt="Thor">
+                <img src="/static/thor_thumbnail.png" alt="Thor">
                 <div class="thumb-overlay"></div><span class="thumb-name">THOR</span>
             </div>
             <div class="thumb-item" id="thumb-hulk" onclick="selectCharacter('hulk')">
-                <img src="{{ url_for('static', filename='hulk_thumbnail.png') }}" alt="Hulk">
+                <img src="/static/hulk_thumbnail.png" alt="Hulk">
                 <div class="thumb-overlay"></div><span class="thumb-name">HULK</span>
             </div>
             <div class="thumb-item" id="thumb-scarlet_witch" onclick="selectCharacter('scarlet_witch')">
-                <img src="{{ url_for('static', filename='scarlet_witch_thumbnail.png') }}" alt="Scarlet">
+                <img src="/static/scarlet_witch_thumbnail.png" alt="Scarlet">
                 <div class="thumb-overlay"></div><span class="thumb-name">SCARLET WITCH</span>
             </div>
             <div class="thumb-item" id="thumb-black_widow" onclick="selectCharacter('black_widow')">
-                <img src="{{ url_for('static', filename='black_widow_thumbnail.png') }}" alt="Black Widow">
+                <img src="/static/black_widow_thumbnail.png" alt="Black Widow">
                 <div class="thumb-overlay"></div><span class="thumb-name">BLACK WIDOW</span>
             </div>
             <div class="thumb-item" id="thumb-dr_strange" onclick="selectCharacter('dr_strange')">
-                <img src="{{ url_for('static', filename='dr_strange_thumbnail.png') }}" alt="Dr. Strange">
+                <img src="/static/dr_strange_thumbnail.png" alt="Dr. Strange">
                 <div class="thumb-overlay"></div><span class="thumb-name">DR. STRANGE</span>
             </div>
             <div class="thumb-item" id="thumb-loki" onclick="selectCharacter('loki')">
-                <img src="{{ url_for('static', filename='loki_thumbnail.png') }}" alt="Loki">
+                <img src="/static/loki_thumbnail.png" alt="Loki">
                 <div class="thumb-overlay"></div><span class="thumb-name">LOKI</span>
             </div>
             <div class="thumb-item" id="thumb-hawkeye" onclick="selectCharacter('hawkeye')">
-                <img src="{{ url_for('static', filename='hawkeye_thumbnail.png') }}" alt="Hawkeye">
+                <img src="/static/hawkeye_thumbnail.png" alt="Hawkeye">
                 <div class="thumb-overlay"></div><span class="thumb-name">HAWKEYE</span>
             </div>
             <div class="thumb-item" id="thumb-thanos" onclick="selectCharacter('thanos')">
-                <img src="{{ url_for('static', filename='thanos_thumbnail.png') }}" alt="Thanos">
+                <img src="/static/thanos_thumbnail.png" alt="Thanos">
                 <div class="thumb-overlay"></div><span class="thumb-name">THANOS</span>
             </div>
         </div>
@@ -403,102 +455,44 @@
     <main class="main-content">
         
         <div class="top-right-logo">
-            <img src="{{ url_for('static', filename='avenger.jpg') }}" alt="Marvel Logo" onerror="this.style.display='none'">
+            <img src="/static/avenger.jpg" alt="Marvel Logo" onerror="this.style.display='none'">
         </div>
 
-        <!-- NEW TOP ACTIONS (CART & LOGIN) -->
         <div class="top-actions">
             <a class="cart-btn-top" onclick="toggleCartModal(true)">🛒 CART (<span id="cart-count">0</span>)</a>
             <a href="/signup" id="auth-btn" class="signup-btn">SIGN UP</a>
         </div>
 
-        <!-- TAB 1: PORTADA -->
         <div id="master-portada" class="master-tab active-master">
-            <div class="diagonal-accent accent-1"></div>
             
-            <div class="scroll-section hero-section">
-                <div>
-                    <h1 class="character-title">
-                        <span class="title-bold" id="title-first">IRON</span>
-                        <span class="title-light" id="title-second">MAN</span>
-                    </h1>
-                    <button class="action-btn">PLAY TRAILER</button>
-                </div>
-                <img class="hero-bg-cutout" id="detail-image" src="{{ url_for('static', filename='ironman_cutout.png') }}">
-            </div>
-
-            <div class="scroll-section feature-section">
-                <div class="feature-image">
-                    <img id="feature-image" src="{{ url_for('static', filename='ironman_thumbnail.png') }}" alt="Suit Display">
-                </div>
-                <div class="feature-content">
-                    <h2 class="section-header big-header">OFFICIAL ARCHIVES<br><span>DATABASE LOADED</span></h2>
-                    <p class="section-text" id="detail-synopsis">After a life-threatening incident, Tony Stark creates a mechanized suit of armor to save his own life and escape captivity. He continues to refine his technology, fighting foes in a high-tech suit equipped with advanced flight capabilities.</p>
-                    <button class="action-btn">FULL STORY</button>
-                </div>
-            </div>
-
-            <div class="scroll-section centerpiece-section">
-                <div class="diagonal-accent accent-2"></div>
-                <div class="side-text-block">
-                    <h3>CUSTOMIZE YOUR GEAR</h3>
-                    <p>Your journey through the Marvel Universe is entirely unique. Review the tactical data and prepare for the battle ahead.</p>
-                </div>
-                <div class="center-focus">
-                    <div class="center-bg-box"></div>
-                    <img id="center-image" src="{{ url_for('static', filename='ironman_cutout.png') }}" alt="Center Hero">
-                </div>
-                <div class="side-text-block right">
-                    <h3>NEVER BE THE SAME</h3>
-                    <p>The most intense, immersive combat experience yet. Every battle is different. Every upgrade matters.</p>
-                </div>
-            </div>
-
-            <div class="scroll-section roster-section">
-                <h2 class="section-header big-header" style="text-align: left;">UPGRADE YOUR<br><span style="color:white; margin-top:0;">ARMORY</span></h2>
+            <div id="cinematic-bg" class="cinematic-container" style="background-image: url('/static/ironman_cutout.png');">
                 
-                <div class="roster-grid">
-                    <div class="roster-card">
-                        <div class="roster-card-img"><img src="{{ url_for('static', filename='ironman_cutout.png') }}"></div>
-                        <div class="roster-card-info">
-                            <h4>MARK I ARMOR</h4>
-                            <div class="stat-bar"><span>DAMAGE</span><div class="stat-fill" style="width: 80%;"></div></div>
-                            <div class="stat-bar"><span>MOBILITY</span><div class="stat-fill" style="width: 30%;"></div></div>
-                            <div class="stat-bar"><span>DEFENSE</span><div class="stat-fill" style="width: 90%;"></div></div>
-                        </div>
-                    </div>
-                    <div class="roster-card">
-                        <div class="roster-card-img"><img src="{{ url_for('static', filename='spiderman_cutout.png') }}"></div>
-                        <div class="roster-card-info">
-                            <h4>IRON SPIDER</h4>
-                            <div class="stat-bar"><span>DAMAGE</span><div class="stat-fill" style="width: 70%;"></div></div>
-                            <div class="stat-bar"><span>MOBILITY</span><div class="stat-fill" style="width: 100%;"></div></div>
-                            <div class="stat-bar"><span>DEFENSE</span><div class="stat-fill" style="width: 60%;"></div></div>
-                        </div>
-                    </div>
-                    <div class="roster-card">
-                        <div class="roster-card-img"><img src="{{ url_for('static', filename='cap_cutout.png') }}"></div>
-                        <div class="roster-card-info">
-                            <h4>VIBRANIUM SHIELD</h4>
-                            <div class="stat-bar"><span>DAMAGE</span><div class="stat-fill" style="width: 60%;"></div></div>
-                            <div class="stat-bar"><span>MOBILITY</span><div class="stat-fill" style="width: 70%;"></div></div>
-                            <div class="stat-bar"><span>DEFENSE</span><div class="stat-fill" style="width: 100%;"></div></div>
-                        </div>
-                    </div>
-                    <div class="roster-card">
-                        <div class="roster-card-img"><img src="{{ url_for('static', filename='thor_cutout.png') }}"></div>
-                        <div class="roster-card-info">
-                            <h4>STORMBREAKER</h4>
-                            <div class="stat-bar"><span>DAMAGE</span><div class="stat-fill" style="width: 100%;"></div></div>
-                            <div class="stat-bar"><span>MOBILITY</span><div class="stat-fill" style="width: 80%;"></div></div>
-                            <div class="stat-bar"><span>DEFENSE</span><div class="stat-fill" style="width: 80%;"></div></div>
-                        </div>
-                    </div>
+                <div class="movie-info-left">
+                    <h1 class="movie-title">
+                        <span id="title-first">IRON</span> <br> <span id="title-second" style="color: var(--theme-color);">MAN</span>
+                    </h1>
+                    <p class="character-name">— <span id="realName">TONY STARK</span> —</p>
+                    
+                    <div class="divider-line"></div>
+                    
+                    <p id="castInfo" class="cast-text">Select a hero to view their classified archives and combat data.</p>
                 </div>
+
+                <div class="movie-info-right">
+                    <p id="detail-synopsis" class="description-text">
+                        After a life-threatening incident, Tony Stark creates a mechanized suit of armor to save his own life and escape captivity. He continues to refine his technology, fighting foes in a high-tech suit.
+                    </p>
+                    
+                    <div class="divider-line right-line"></div>
+                    
+                    <button id="playTrailerBtn" class="circular-play-btn">
+                        ▶
+                    </button>
+                </div>
+                
             </div>
         </div>
 
-        <!-- TAB 2: HISTORIA -->
         <div id="master-historia" class="master-tab">
             <div class="full-page-content">
                 <h1 class="character-title"><span class="title-bold">COMIC</span><span class="title-light">ORIGIN</span></h1>
@@ -509,14 +503,12 @@
             </div>
         </div>
 
-        <!-- TAB 3: POSTER -->
         <div id="master-poster" class="master-tab">
             <div class="poster-container">
-                <img class="poster-image" id="detail-poster" src="{{ url_for('static', filename='ironman_thumbnail.png') }}" alt="Movie Poster">
+                <img class="poster-image" id="detail-poster" src="/static/ironman_thumbnail.png" alt="Movie Poster">
             </div>
         </div>
 
-        <!-- TAB 4: DISEÑO -->
         <div id="master-diseno" class="master-tab">
             <div class="full-page-content">
                 <h1 class="character-title"><span class="title-bold">TECH</span><span class="title-light">SPECS</span></h1>
@@ -533,19 +525,15 @@
             </div>
         </div>
 
-        <!-- ===================================== -->
-        <!-- TAB 5: SHOP SECTION                   -->
-        <!-- ===================================== -->
         <div id="master-shop" class="master-tab">
             <div class="shop-wrapper">
                 <div class="shop-header">
                     <h2>MARVEL GEAR</h2>
                 </div>
                 <div class="product-gallery">
-                    <!-- SHIRT 1: IRON MAN -->
                     <div class="product-item">
                         <div class="product-image-box">
-                            <img src="{{ url_for('static', filename='ironman_shirt.png') }}" alt="Iron Man Tech Tee">
+                            <img src="/static/ironman_shirt.png" alt="Iron Man Tech Tee">
                         </div>
                         <div class="product-details">
                             <h3>Iron Man Tech Tee</h3>
@@ -556,10 +544,10 @@
                             </div>
                         </div>
                     </div>
-                    <!-- SHIRT 2: SPIDER-MAN -->
+                    
                     <div class="product-item">
                         <div class="product-image-box">
-                            <img src="{{ url_for('static', filename='spidey_shirt.png') }}" alt="Spider-Man Streetwear">
+                            <img src="/static/spidey_shirt.png" alt="Spider-Man Streetwear">
                         </div>
                         <div class="product-details">
                             <h3>Spider-Man Streetwear</h3>
@@ -570,10 +558,10 @@
                             </div>
                         </div>
                     </div>
-                    <!-- SHIRT 3: CAPTAIN AMERICA -->
+
                     <div class="product-item">
                         <div class="product-image-box">
-                            <img src="{{ url_for('static', filename='cap_shirt.png') }}" alt="Captain America Shield Tee">
+                            <img src="/static/cap_shirt.png" alt="Captain America Shield Tee">
                         </div>
                         <div class="product-details">
                             <h3>Captain America Shield Tee</h3>
@@ -584,10 +572,10 @@
                             </div>
                         </div>
                     </div>
-                    <!-- SHIRT 4: LOKI -->
+
                     <div class="product-item">
                         <div class="product-image-box">
-                            <img src="{{ url_for('static', filename='loki_shirt.png') }}" alt="God of Mischief Hoodie">
+                            <img src="/static/loki_shirt.png" alt="God of Mischief Hoodie">
                         </div>
                         <div class="product-details">
                             <h3>God of Mischief Hoodie</h3>
@@ -598,10 +586,10 @@
                             </div>
                         </div>
                     </div>
-                    <!-- SHIRT 5: THOR -->
+
                     <div class="product-item">
                         <div class="product-image-box">
-                            <img src="{{ url_for('static', filename='thor_shirt.png') }}" alt="Thor Stormbreaker Tee">
+                            <img src="/static/thor_shirt.png" alt="Thor Stormbreaker Tee">
                         </div>
                         <div class="product-details">
                             <h3>Thor Stormbreaker Tee</h3>
@@ -612,10 +600,10 @@
                             </div>
                         </div>
                     </div>
-                    <!-- SHIRT 6: HULK -->
+
                     <div class="product-item">
                         <div class="product-image-box">
-                            <img src="{{ url_for('static', filename='hulk_shirt.png') }}" alt="Hulk Gamma Graphic Tee">
+                            <img src="/static/hulk_shirt.png" alt="Hulk Gamma Graphic Tee">
                         </div>
                         <div class="product-details">
                             <h3>Hulk Gamma Graphic Tee</h3>
@@ -626,10 +614,10 @@
                             </div>
                         </div>
                     </div>
-                    <!-- SHIRT 7: SCARLET WITCH -->
+
                     <div class="product-item">
                         <div class="product-image-box">
-                            <img src="{{ url_for('static', filename='scarlet_witch_shirt.png') }}" alt="Scarlet Witch Chaos Hoodie">
+                            <img src="/static/scarlet_witch_shirt.png" alt="Scarlet Witch Chaos Hoodie">
                         </div>
                         <div class="product-details">
                             <h3>Scarlet Witch Chaos Hoodie</h3>
@@ -640,10 +628,10 @@
                             </div>
                         </div>
                     </div>
-                    <!-- SHIRT 8: DR. STRANGE -->
+
                     <div class="product-item">
                         <div class="product-image-box">
-                            <img src="{{ url_for('static', filename='dr_strange_shirt.png') }}" alt="Sanctum Sanctorum Cloak Tee">
+                            <img src="/static/dr_strange_shirt.png" alt="Sanctum Sanctorum Cloak Tee">
                         </div>
                         <div class="product-details">
                             <h3>Sanctum Sanctorum Cloak Tee</h3>
@@ -654,10 +642,10 @@
                             </div>
                         </div>
                     </div>
-                    <!-- SHIRT 9: HAWKEYE -->
+
                     <div class="product-item">
                         <div class="product-image-box">
-                            <img src="{{ url_for('static', filename='hawkeye_shirt.png') }}" alt="Hawkeye Bullseye Longsleeve">
+                            <img src="/static/hawkeye_shirt.png" alt="Hawkeye Bullseye Longsleeve">
                         </div>
                         <div class="product-details">
                             <h3>Hawkeye Bullseye Longsleeve</h3>
@@ -668,10 +656,10 @@
                             </div>
                         </div>
                     </div>
-                    <!-- SHIRT 10: THANOS -->
+
                     <div class="product-item">
                         <div class="product-image-box">
-                            <img src="{{ url_for('static', filename='thanos_shirt.png') }}" alt="Infinity Gauntlet Heavy Tee">
+                            <img src="/static/thanos_shirt.png" alt="Infinity Gauntlet Heavy Tee">
                         </div>
                         <div class="product-details">
                             <h3>Infinity Gauntlet Heavy Tee</h3>
@@ -688,7 +676,6 @@
 
     </main>
 
-    <!-- RIGHT SIDEBAR -->
     <aside class="right-sidebar">
         <div id="v-nav-portada" class="v-nav-item active-v-nav" onclick="switchRightTab(event, 'portada')">
             <span class="v-text">PORTADA</span>
@@ -707,9 +694,6 @@
         </div>
     </aside>
 
-    <!-- ===================================== -->
-    <!-- CART POPUP MODAL                      -->
-    <!-- ===================================== -->
     <div id="cart-modal" class="modal-overlay">
         <div class="modal-content">
             <span class="close-btn" onclick="toggleCartModal(false)">&times;</span>
@@ -717,8 +701,7 @@
             <p style="color: var(--text-light); margin-top: 5px; margin-bottom: 20px;">Review your gear before deployment.</p>
             
             <div id="cart-items-container" style="max-height: 300px; overflow-y: auto; padding-right: 10px;">
-                <!-- JavaScript will inject items here -->
-            </div>
+                </div>
             
             <div style="margin-top: 25px; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 20px; display: flex; justify-content: space-between; align-items: center;">
                 <h3 style="font-family: 'Oswald', sans-serif; font-size: 1.5rem; color: white;">TOTAL: <span id="cart-total-price">₹0</span></h3>
@@ -727,160 +710,167 @@
         </div>
     </div>
 
-    <!-- ===================================== -->
-    <!-- JAVASCRIPT                            -->
-    <!-- ===================================== -->
     <script>
+        // Global variable for trailers
+        let currentTrailerUrl = "https://www.youtube.com/watch?v=8ugaeA-nMTc"; // Default Iron Man Trailer
+
         const characters = {
             'spiderman': {
-                titleFirst: 'IRON', titleSecond: 'SPIDER', 
-                synopsis: 'Following the events of the Infinity War, Peter Parker must step up and take on new responsibilities. Equipped with the high-tech Iron Spider armor designed by Tony Stark, his capabilities are enhanced with mechanical spider-arms and advanced targeting systems.',
-                image: '/static/spiderman_cutout.png', 
-                poster: '/static/spiderman_thumbnail.png',
-                history: 'Peter Parker gained his powers after being bitten by a radioactive spider on a high school field trip. \n\nLearning that "With great power comes great responsibility" after the tragic death of his Uncle Ben, he dedicated his life to fighting crime in New York City.',
+                titleFirst: 'SPIDER-', titleSecond: 'MAN', realName: 'PETER PARKER',
+                synopsis: 'Following the events of the Infinity War, Peter Parker must step up and take on new responsibilities. Equipped with the high-tech Iron Spider armor designed by Tony Stark.',
+                image: '/static/spiderman_cutout.png', poster: '/static/spiderman_thumbnail.png',
+                history: 'Peter Parker gained his powers after being bitten by a radioactive spider on a high school field trip. \n\nLearning that "With great power comes great responsibility" after the tragic death of his Uncle Ben, he dedicated his life to fighting crime.',
                 combat: 'STRENGTH: 8/10\nSPEED: 9/10\nDURABILITY: 7/10\nINTELLIGENCE: 9/10',
-                abilities: '- Danger-warning Spider-Sense\n- Superhuman strength and agility\n- Wall-crawling\n- Web-shooters (Stark Tech Upgraded)',
-                theme: 'theme-spiderman'
+                abilities: '- Danger-warning Spider-Sense\n- Superhuman strength and agility\n- Wall-crawling\n- Web-shooters (Stark Tech)',
+                theme: 'theme-spiderman',
+                trailer: 'https://www.youtube.com/watch?v=t06RUxPbp_c' 
             },
             'captain_america': {
-                titleFirst: 'CAPTAIN', titleSecond: 'AMERICA',
-                synopsis: 'Steve Rogers, the first Avenger, was frozen in ice for decades before waking up in the modern world. He serves as the moral compass and tactical leader of the Avengers. Captain America wields his virtually indestructible vibranium shield to defend freedom.',
-                image: '/static/cap_cutout.png',
-                poster: '/static/cap_thumbnail.png',
-                history: 'Born in 1918, Steve Rogers was a scrawny fine arts student who desperately wanted to fight in WWII. Rejected due to health issues, he volunteered for Project Rebirth.\n\nThe serum transformed him into the pinnacle of human perfection.',
+                titleFirst: 'CAPTAIN', titleSecond: 'AMERICA', realName: 'STEVE ROGERS',
+                synopsis: 'Steve Rogers, the first Avenger, was frozen in ice for decades before waking up in the modern world. He serves as the moral compass and tactical leader of the Avengers.',
+                image: '/static/cap_cutout.png', poster: '/static/cap_thumbnail.png',
+                history: 'Born in 1918, Steve Rogers was a scrawny fine arts student who desperately wanted to fight in WWII. Rejected due to health issues, he volunteered for Project Rebirth.',
                 combat: 'STRENGTH: 7/10\nSPEED: 7/10\nDURABILITY: 8/10\nINTELLIGENCE: 8/10',
                 abilities: '- Master Martial Artist & Tactician\n- Enhanced human physiology\n- Indestructible Vibranium Shield',
-                theme: 'theme-captain_america'
+                theme: 'theme-captain_america',
+                trailer: 'https://www.youtube.com/watch?v=7SlILk2WMTI' 
             },
             'iron_man': {
-                titleFirst: 'IRON', titleSecond: 'MAN',
-                synopsis: 'After a life-threatening incident, Tony Stark creates a mechanized suit of armor to save his own life and escape captivity. He continues to refine his technology, fighting foes in a high-tech suit equipped with advanced flight capabilities.',
-                image: '/static/ironman_cutout.png',
-                poster: '/static/ironman_thumbnail.png',
-                history: 'Anthony Edward Stark inherited Stark Industries from his father, Howard Stark. After being captured by the Ten Rings terrorist group, he built the Mark I armor to escape.\n\nRealizing his weapons were falling into the wrong hands, he shut down weapon manufacturing.',
+                titleFirst: 'IRON', titleSecond: 'MAN', realName: 'TONY STARK',
+                synopsis: 'After a life-threatening incident, Tony Stark creates a mechanized suit of armor to save his own life and escape captivity. He continues to refine his technology, fighting foes in a high-tech suit.',
+                image: '/static/ironman_cutout.png', poster: '/static/ironman_thumbnail.png',
+                history: 'Anthony Edward Stark inherited Stark Industries from his father. After being captured by the Ten Rings, he built the Mark I armor to escape.',
                 combat: 'STRENGTH: 9/10\nSPEED: 10/10\nDURABILITY: 9/10\nINTELLIGENCE: 10/10',
                 abilities: '- Genius-level intellect\n- Powered Exoskeleton\n- Repulsor Blasts & Unibeam',
-                theme: 'theme-iron_man'
+                theme: 'theme-iron_man',
+                trailer: 'https://www.youtube.com/watch?v=8ugaeA-nMTc' 
             },
             'thor': {
-                titleFirst: 'THOR', titleSecond: 'ODINSON',
+                titleFirst: 'THOR', titleSecond: 'ODINSON', realName: 'GOD OF THUNDER',
                 synopsis: 'Banished to Earth to learn a lesson in humility, Thor Odinson must prove himself worthy to wield his power. Stripped of his legendary hammer, Mjolnir, Thor learns what it truly means to be a hero.',
-                image: '/static/thor_cutout.png', 
-                poster: '/static/thor_thumbnail.png',
-                history: 'Thor is the God of Thunder, son of Odin, the All-Father of Asgard. Originally arrogant and reckless, his banishment to Midgard (Earth) taught him humility.\n\nHe is a founding member of the Avengers.',
+                image: '/static/thor_cutout.png', poster: '/static/thor_thumbnail.png',
+                history: 'Thor is the God of Thunder, son of Odin. Originally arrogant and reckless, his banishment to Midgard (Earth) taught him humility.',
                 combat: 'STRENGTH: 10/10\nSPEED: 8/10\nDURABILITY: 10/10\nINTELLIGENCE: 6/10',
                 abilities: '- Immortality and Asgardian Physiology\n- Manipulation of Weather and Lightning',
-                theme: 'theme-thor'
+                theme: 'theme-thor',
+                trailer: 'https://www.youtube.com/watch?v=v7MGUNV8MxU' 
             },
             'hulk': {
-                titleFirst: 'THE', titleSecond: 'HULK',
-                synopsis: 'A brilliant scientist exposed to a massive dose of gamma radiation, Bruce Banner struggles to control the beast within. When provoked, he transforms into the Hulk—the angrier he gets, the stronger he becomes.',
-                image: '/static/hulk_cutout.png',
-                poster: '/static/hulk_thumbnail.png',
-                history: 'While working on recreating the Super Soldier Serum for the US Military, Dr. Bruce Banner subjected himself to intense Gamma Radiation.\n\nThe experiment failed catastrophically.',
+                titleFirst: 'THE', titleSecond: 'HULK', realName: 'BRUCE BANNER',
+                synopsis: 'A brilliant scientist exposed to a massive dose of gamma radiation, Bruce Banner struggles to control the beast within. When provoked, he transforms into the Hulk.',
+                image: '/static/hulk_cutout.png', poster: '/static/hulk_thumbnail.png',
+                history: 'While working on recreating the Super Soldier Serum for the US Military, Dr. Bruce Banner subjected himself to intense Gamma Radiation.',
                 combat: 'STRENGTH: 10/10\nSPEED: 8/10\nDURABILITY: 10/10\nINTELLIGENCE: 10/10',
                 abilities: '- Virtually limitless physical strength\n- Regenerative Healing Factor',
-                theme: 'theme-hulk'
+                theme: 'theme-hulk',
+                trailer: 'https://www.youtube.com/watch?v=xbqNb2PFKKA'
             },
             'scarlet_witch': {
-                titleFirst: 'SCARLET', titleSecond: 'WITCH',
-                synopsis: 'Starting out as an antagonist manipulated by Hydra, Wanda eventually joins the Avengers to fight for humanity. Her devastating powers allow her to alter reality, manipulate energy, cast hexes, and employ advanced telekinesis.',
-                image: '/static/scarlet_witch_cutout.png',
-                poster: '/static/scarlet_witch_thumbnail.png',
+                titleFirst: 'SCARLET', titleSecond: 'WITCH', realName: 'WANDA MAXIMOFF',
+                synopsis: 'Starting out as an antagonist manipulated by Hydra, Wanda eventually joins the Avengers to fight for humanity. Her devastating powers allow her to alter reality.',
+                image: '/static/scarlet_witch_cutout.png', poster: '/static/scarlet_witch_thumbnail.png',
                 history: 'Wanda and her twin brother Pietro volunteered for Hydra experiments using the Mind Stone. The stone unlocked Wanda\'s latent magical abilities.',
                 combat: 'STRENGTH: 4/10\nSPEED: 5/10\nDURABILITY: 5/10\nMAGIC: 10/10',
                 abilities: '- Chaos Magic manipulation\n- Telekinesis & Telepathy\n- Reality Warping',
-                theme: 'theme-scarlet_witch'
+                theme: 'theme-scarlet_witch',
+                trailer: 'https://www.youtube.com/watch?v=aISqHAApXk0'
             },
             'black_widow': {
-                titleFirst: 'BLACK', titleSecond: 'WIDOW',
-                synopsis: 'Natasha Romanoff, formerly trained in the lethal "Red Room" program, is one of the world\'s deadliest spies. After defecting from the KGB and joining S.H.I.E.L.D., she uses her unmatched expertise in espionage to protect the world.',
-                image: '/static/black_widow_cutout.png',
-                poster: '/static/black_widow_thumbnail.png',
+                titleFirst: 'BLACK', titleSecond: 'WIDOW', realName: 'NATASHA ROMANOFF',
+                synopsis: 'Natasha Romanoff, formerly trained in the lethal "Red Room" program, is one of the world\'s deadliest spies. After defecting from the KGB, she uses her unmatched expertise in espionage to protect the world.',
+                image: '/static/black_widow_cutout.png', poster: '/static/black_widow_thumbnail.png',
                 history: 'Natasha was recruited as a child into the Red Room, where she was conditioned into a master assassin. Haunted by her past, she sought redemption through S.H.I.E.L.D.',
                 combat: 'STRENGTH: 5/10\nSPEED: 8/10\nDURABILITY: 5/10\nINTELLIGENCE: 9/10',
                 abilities: '- Expert Martial Artist & Marksman\n- Master Spy & Infiltrator',
-                theme: 'theme-black_widow'
+                theme: 'theme-black_widow',
+                trailer: 'https://www.youtube.com/watch?v=Fp9pNPdNwjI'
             },
             'dr_strange': {
-                titleFirst: 'DOCTOR', titleSecond: 'STRANGE',
+                titleFirst: 'DOCTOR', titleSecond: 'STRANGE', realName: 'STEPHEN STRANGE',
                 synopsis: 'After a horrific car accident ends his surgical career, Stephen Strange searches for a cure in the mystic arts. He discovers a world of hidden dimensions and ancient magic as the Sorcerer Supreme.',
-                image: '/static/dr_strange_cutout.png',
-                poster: '/static/dr_strange_thumbnail.png',
+                image: '/static/dr_strange_cutout.png', poster: '/static/dr_strange_thumbnail.png',
                 history: 'Dr. Stephen Strange was a world-renowned but arrogant neurosurgeon. After losing the use of his hands, his desperation led him to Kamar-Taj.',
                 combat: 'STRENGTH: 4/10\nSPEED: 6/10\nDURABILITY: 6/10\nMAGIC: 10/10',
                 abilities: '- Master of the Mystic Arts\n- Reality & Dimension Manipulation',
-                theme: 'theme-dr_strange'
+                theme: 'theme-dr_strange',
+                trailer: 'https://www.youtube.com/watch?v=h7gvFravm4Q'
             },
             'loki': {
-                titleFirst: 'LOKI', titleSecond: 'LAUFEYSON',
-                synopsis: 'Loki, the Prince of Lies, has walked the line between hero and villain for centuries. Seeking validation and power, he has caused chaos across the Nine Realms, yet often finds himself reluctantly aiding those he once opposed.',
-                image: '/static/loki_cutout.png',
-                poster: '/static/loki_thumbnail.png',
+                titleFirst: 'LOKI', titleSecond: 'LAUFEYSON', realName: 'GOD OF MISCHIEF',
+                synopsis: 'Loki, the Prince of Lies, has walked the line between hero and villain for centuries. Seeking validation and power, he has caused chaos across the Nine Realms.',
+                image: '/static/loki_cutout.png', poster: '/static/loki_thumbnail.png',
                 history: 'Born a Frost Giant, Loki was adopted by Odin and raised alongside Thor. Feeling perpetually in his brother\'s shadow, he turned to mischief.',
                 combat: 'STRENGTH: 6/10\nSPEED: 7/10\nDURABILITY: 7/10\nINTELLIGENCE: 9/10',
                 abilities: '- Master Illusionist & Shapeshifter\n- Expert Combatant & Dagger Wielder',
-                theme: 'theme-loki'
+                theme: 'theme-loki',
+                trailer: 'https://www.youtube.com/watch?v=nW948Va-l10'
             },
             'hawkeye': {
-                titleFirst: 'CLINT', titleSecond: 'BARTON',
+                titleFirst: 'CLINT', titleSecond: 'BARTON', realName: 'HAWKEYE',
                 synopsis: 'Clint Barton, known as Hawkeye, is a founding member of the Avengers with a unique set of skills. His unparalleled accuracy with a bow and arrow, combined with his tactical mind, makes him a valuable asset.',
-                image: '/static/hawkeye_cutout.png',
-                poster: '/static/hawkeye_thumbnail.png',
+                image: '/static/hawkeye_cutout.png', poster: '/static/hawkeye_thumbnail.png',
                 history: 'Clint grew up in a traveling circus, honing his aim. He was recruited by S.H.I.E.L.D. after being sent to eliminate Natasha Romanoff.',
                 combat: 'STRENGTH: 5/10\nSPEED: 7/10\nDURABILITY: 5/10\nINTELLIGENCE: 8/10',
                 abilities: '- Master Marksman & Archer\n- Expert Tactical Combatant\n- Versatile Trick Arrows',
-                theme: 'theme-hawkeye'
+                theme: 'theme-hawkeye',
+                trailer: 'https://www.youtube.com/watch?v=5VYb3B1ETlk'
             },
             'thanos': {
-                titleFirst: 'MAD', titleSecond: 'TITAN',
+                titleFirst: 'MAD', titleSecond: 'TITAN', realName: 'THANOS',
                 synopsis: 'Thanos is a ruthless conqueror who seeks to bring balance to the universe by wiping out half of all life. Driven by a distorted sense of purpose, he searches for the six Infinity Stones to fulfill his vision.',
-                image: '/static/thanos_cutout.png',
-                poster: '/static/thanos_thumbnail.png',
+                image: '/static/thanos_cutout.png', poster: '/static/thanos_thumbnail.png',
                 history: 'Born on the dying planet Titan, Thanos witnessed his race\'s extinction due to overpopulation. He swore to prevent this fate from befalling the rest of the universe.',
                 combat: 'STRENGTH: 10/10\nSPEED: 7/10\nDURABILITY: 10/10\nINTELLIGENCE: 9/10',
                 abilities: '- Superhuman Strength & Durability\n- Master Tactician & Combatant\n- Mastery of the Infinity Gauntlet',
-                theme: 'theme-thanos'
+                theme: 'theme-thanos',
+                trailer: 'https://www.youtube.com/watch?v=6ZfuNTqbHE8'
             }
         };
 
+        // =========================================================================
+        // UI UPDATES & TAB SWITCHING
+        // =========================================================================
         function selectCharacter(id) {
             const char = characters[id];
             if (!char) return;
 
-            document.getElementById('title-first').innerText = char.titleFirst;
-            document.getElementById('title-second').innerText = char.titleSecond;
-            document.getElementById('detail-synopsis').innerText = char.synopsis;
-            document.getElementById('detail-history').innerText = char.history;
-            document.getElementById('detail-combat').innerText = char.combat;
-            document.getElementById('detail-abilities').innerText = char.abilities;
-            document.getElementById('detail-poster').src = char.poster;
+            // 1. Update text elements
+            if (document.getElementById('title-first')) document.getElementById('title-first').innerText = char.titleFirst;
+            if (document.getElementById('title-second')) document.getElementById('title-second').innerText = char.titleSecond;
+            if (document.getElementById('realName')) document.getElementById('realName').innerText = char.realName;
+            if (document.getElementById('detail-synopsis')) document.getElementById('detail-synopsis').innerText = char.synopsis;
+            if (document.getElementById('detail-history')) document.getElementById('detail-history').innerText = char.history;
+            if (document.getElementById('detail-combat')) document.getElementById('detail-combat').innerText = char.combat;
+            if (document.getElementById('detail-abilities')) document.getElementById('detail-abilities').innerText = char.abilities;
+            if (document.getElementById('detail-poster')) document.getElementById('detail-poster').src = char.poster;
             
-            const heroImg = document.getElementById('detail-image');
+            // 2. Update Cinematic Background & Trailer
+            currentTrailerUrl = char.trailer; 
+            const cinematicBg = document.getElementById('cinematic-bg');
+            if (cinematicBg) cinematicBg.style.backgroundImage = `url('${char.image}')`;
+
+            // 3. Update older image elements (Safeguarded in case they still exist in other tabs)
             const featureImg = document.getElementById('feature-image');
             const centerImg = document.getElementById('center-image');
             
-            heroImg.style.opacity = 0; heroImg.style.transform = 'scale(0.95) translateX(20px)';
-            featureImg.style.opacity = 0; featureImg.style.transform = 'scale(0.95)';
-            centerImg.style.opacity = 0; centerImg.style.transform = 'scale(0.95)';
+            if(featureImg) { featureImg.style.opacity = 0; featureImg.style.transform = 'scale(0.95)'; }
+            if(centerImg) { centerImg.style.opacity = 0; centerImg.style.transform = 'scale(0.95)'; }
 
             setTimeout(() => {
-                heroImg.src = char.image;
-                featureImg.src = char.poster;
-                centerImg.src = char.image;
-                
-                heroImg.style.opacity = 1; heroImg.style.transform = 'scale(1) translateX(0)';
-                featureImg.style.opacity = 1; featureImg.style.transform = 'scale(1)';
-                centerImg.style.opacity = 1; centerImg.style.transform = 'scale(1)';
+                if(featureImg) { featureImg.src = char.poster; featureImg.style.opacity = 1; featureImg.style.transform = 'scale(1)'; }
+                if(centerImg) { centerImg.src = char.image; centerImg.style.opacity = 1; centerImg.style.transform = 'scale(1)'; }
             }, 300);
 
+            // 4. Update the Page Theme
             document.body.className = char.theme;
 
+            // 5. Update Sidebar Active State
             document.querySelectorAll('.thumb-item').forEach(t => t.classList.remove('active'));
             document.getElementById('thumb-' + id).classList.add('active');
 
-            document.getElementById('v-nav-portada').click();
-            document.getElementById('master-portada').scrollTo(0, 0); 
+            // 6. Force switch back to Portada tab when a new character is clicked
+            if(document.getElementById('v-nav-portada')) document.getElementById('v-nav-portada').click();
+            if(document.getElementById('master-portada')) document.getElementById('master-portada').scrollTo(0, 0); 
         }
 
         function switchRightTab(event, masterId) {
@@ -888,52 +878,142 @@
             event.currentTarget.classList.add('active-v-nav');
 
             document.querySelectorAll('.master-tab').forEach(tab => tab.classList.remove('active-master'));
-            document.getElementById('master-' + masterId).classList.add('active-master');
+            const targetTab = document.getElementById('master-' + masterId);
+            if (targetTab) targetTab.classList.add('active-master');
         }
 
         function toggleMusic() {
             const audio = document.getElementById('theme-song');
             const btn = document.getElementById('music-btn');
+            if (!audio || !btn) return;
+
             if (audio.paused) {
-                audio.play(); btn.innerText = "🔊 PAUSE THEME"; btn.classList.add("playing");
+                audio.play(); 
+                btn.innerText = "🔊 PAUSE THEME"; 
+                btn.classList.add("playing");
             } else {
-                audio.pause(); btn.innerText = "🎵 PLAY THEME"; btn.classList.remove("playing");
+                audio.pause(); 
+                btn.innerText = "🎵 PLAY THEME"; 
+                btn.classList.remove("playing");
             }
         }
 
-        // =====================================
-        // CART LOGIC
-        // =====================================
-        let cart = []; // Stores our items
+        // =========================================================================
+        // TRAILER LOGIC
+        // =========================================================================
+        document.addEventListener("DOMContentLoaded", () => {
+            const playTrailerBtn = document.getElementById('playTrailerBtn');
+            if (playTrailerBtn) {
+                playTrailerBtn.addEventListener('click', () => {
+                    if (currentTrailerUrl && currentTrailerUrl !== "") {
+                        window.open(currentTrailerUrl, '_blank');
+                    } else {
+                        alert("Trailer coming soon for this character!");
+                    }
+                });
+            }
+        });
 
-        function addToCart(itemName, itemPrice, event) {
+        // =========================================================================
+        // CLOUD CART LOGIC (Supabase + LocalStorage Fallback)
+        // =========================================================================
+        let cart = []; 
+
+        document.addEventListener("DOMContentLoaded", async () => {
+            await fetchCloudCart();
+            checkLoginStatus();
+        });
+
+        async function fetchCloudCart() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                cart = JSON.parse(localStorage.getItem('marvelCart')) || [];
+                updateCartCountDisplay();
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/cart', {
+                    method: 'GET',
+                    headers: { 'Authorization': 'Bearer ' + token }
+                });
+
+                if (response.ok) {
+                    const dbCart = await response.json();
+                    cart = dbCart.map(item => ({ name: item.item_name, price: item.item_price }));
+                    updateCartCountDisplay();
+                }
+            } catch (err) {
+                console.error("Critical issue syncing state with Cloud Storage database:", err);
+            }
+        }
+
+        async function addToCart(itemName, itemPrice, event) {
+            const token = localStorage.getItem('token');
+            
             cart.push({ name: itemName, price: itemPrice });
-            document.getElementById('cart-count').innerText = cart.length;
+            updateCartCountDisplay();
 
-            const btn = event.target;
-            const originalText = btn.innerText;
-            btn.innerText = "ADDED ✓";
-            btn.style.borderColor = "#39ff14"; 
-            btn.style.color = "#39ff14";
+            const buttonElement = event.target;
+            const originalLabel = buttonElement.innerText;
+            buttonElement.innerText = "ADDED ✓";
+            buttonElement.style.borderColor = "#39ff14"; 
+            buttonElement.style.color = "#39ff14";
             
             setTimeout(() => {
-                btn.innerText = originalText;
-                btn.style.borderColor = "rgba(255, 255, 255, 0.5)";
-                btn.style.color = "white";
+                buttonElement.innerText = originalLabel;
+                buttonElement.style.borderColor = "rgba(255, 255, 255, 0.5)";
+                buttonElement.style.color = "white";
             }, 1500);
+
+            if (token) {
+                await fetch('/api/cart', {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token 
+                    },
+                    body: JSON.stringify({ name: itemName, price: itemPrice })
+                });
+            } else {
+                localStorage.setItem('marvelCart', JSON.stringify(cart));
+            }
+        }
+
+        async function clearCart() {
+            const token = localStorage.getItem('token');
+            cart = [];
+            updateCartCountDisplay();
+            renderCartViewModal();
+
+            if (token) {
+                await fetch('/api/cart', {
+                    method: 'DELETE',
+                    headers: { 'Authorization': 'Bearer ' + token }
+                });
+            } else {
+                localStorage.removeItem('marvelCart');
+            }
+        }
+
+        function updateCartCountDisplay() {
+            const countBadge = document.getElementById('cart-count');
+            if (countBadge) countBadge.innerText = cart.length;
         }
 
         function toggleCartModal(show) {
             const modal = document.getElementById('cart-modal');
-            modal.style.display = show ? 'flex' : 'none';
-            if (show) {
-                renderCart();
+            if (modal) {
+                modal.style.display = show ? 'flex' : 'none';
+                if (show) renderCartViewModal();
             }
         }
 
-        function renderCart() {
+        function renderCartViewModal() {
             const container = document.getElementById('cart-items-container');
             const totalEl = document.getElementById('cart-total-price');
+            
+            if (!container || !totalEl) return;
             
             container.innerHTML = ''; 
             let totalAmount = 0;
@@ -944,12 +1024,16 @@
                 cart.forEach(item => {
                     totalAmount += item.price;
                     container.innerHTML += `
-                        <div class="cart-item-row">
+                        <div class="cart-item-row" style="display: flex; justify-content: space-between; margin-bottom: 8px;">
                             <span class="cart-item-name">${item.name}</span>
                             <span class="cart-item-price">₹${item.price}</span>
                         </div>
                     `;
                 });
+                
+                container.innerHTML += `
+                    <button onclick="clearCart()" style="background: transparent; color: #ff4d4d; border: none; cursor: pointer; padding: 8px 0; margin-top: 8px; font-weight: bold; font-family: 'Oswald', sans-serif;">Empty Cart</button>
+                `;
             }
             
             totalEl.innerText = '₹' + totalAmount;
@@ -960,42 +1044,39 @@
                 alert("Your cart is empty! Go add some gear first.");
                 return;
             }
-            
             let totalAmount = cart.reduce((sum, item) => sum + item.price, 0);
             toggleCartModal(false);
             initiatePayment(totalAmount);
         }
 
         // =====================================
-        // PAYMENT LOGIC
+        // PHONEPE PAYMENT LOGIC
         // =====================================
         async function initiatePayment(amount) {
-            const response = await fetch('/create-order', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ amount: amount })
-            });
-            const order = await response.json();
+            try {
+                const response = await fetch('/create-order', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ amount: amount })
+                });
+                
+                const data = await response.json();
 
-            const options = {
-                "key": "YOUR_RAZORPAY_KEY_ID",
-                "amount": order.amount,
-                "currency": "INR",
-                "order_id": order.id,
-                "handler": function (response) {
-                    alert("Payment Successful! Payment ID: " + response.razorpay_payment_id);
-                    cart = []; // Empty the cart after successful purchase
-                    document.getElementById('cart-count').innerText = "0";
+                if (data.url) {
+                    window.location.href = data.url; 
+                } else {
+                    alert("Error creating order: " + (data.error || "Unknown error"));
                 }
-            };
-            const rzp = new Razorpay(options);
-            rzp.open();
+            } catch (err) {
+                alert("Could not connect to PhonePe.");
+                console.error(err);
+            }
         }
 
         // =====================================
         // LOGIN CHECK
         // =====================================
-        document.addEventListener("DOMContentLoaded", async function() {
+        async function checkLoginStatus() {
             const token = localStorage.getItem('token');
             const authBtn = document.getElementById('auth-btn');
 
@@ -1030,7 +1111,7 @@
                     }
                 };
             }
-        });
+        }
     </script>
 </body>
 </html>

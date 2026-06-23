@@ -38,7 +38,136 @@ body.theme-loki { --theme-color: #2e7d32; }
     border-radius: 10px;
 }
 
-/* DETAIL PAGE LAYOUT */
+/* =========================================
+   NEW CINEMATIC CENTER LAYOUT 
+========================================= */
+.cinematic-container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 8%; /* Breathing room from the sidebars */
+    box-sizing: border-box;
+    background-size: cover;
+    background-position: center top;
+    background-repeat: no-repeat;
+}
+
+/* Gradient overlay to make text readable against the background */
+.cinematic-container::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(90deg, rgba(10,10,12,0.95) 0%, rgba(10,10,12,0.1) 30%, rgba(10,10,12,0.1) 70%, rgba(10,10,12,0.95) 100%);
+    z-index: 1;
+}
+
+/* Ensure content sits above the dark overlay */
+.movie-info-left, .movie-info-right {
+    position: relative;
+    z-index: 2;
+    color: white;
+}
+
+/* --- LEFT SIDE STYLING --- */
+.movie-info-left {
+    max-width: 450px;
+    margin-top: 5vh;
+}
+
+.movie-title {
+    font-family: 'Oswald', sans-serif; 
+    font-size: 6rem;
+    font-weight: 700;
+    margin: 0;
+    line-height: 1.1;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-shadow: 2px 4px 15px rgba(0,0,0,0.8);
+}
+
+.movie-subtitle {
+    font-family: sans-serif;
+    font-size: 1.2rem;
+    letter-spacing: 4px;
+    color: #e0e0e0;
+    margin-top: 10px;
+    text-transform: uppercase;
+}
+
+.character-name {
+    font-size: 1rem;
+    color: var(--theme-color, #ffd700); /* Uses active theme color! */
+    letter-spacing: 3px;
+    margin-top: 20px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.divider-line {
+    width: 130%; /* Extends past the text */
+    height: 3px;
+    background-color: var(--theme-color, #e62429); /* Uses active theme color! */
+    margin: 40px 0;
+    box-shadow: 0 0 15px var(--theme-color, #e62429);
+}
+
+.cast-text {
+    font-size: 0.9rem;
+    color: #a0a0a0;
+    line-height: 1.6;
+}
+
+/* --- RIGHT SIDE STYLING --- */
+.movie-info-right {
+    max-width: 350px;
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    margin-top: 5vh;
+}
+
+.description-text {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #d0d0d0;
+    text-shadow: 1px 1px 5px rgba(0,0,0,0.9);
+}
+
+.right-line {
+    width: 100%;
+    margin: 30px 0;
+}
+
+/* Circular Glowing Play Button */
+.circular-play-btn {
+    width: 75px;
+    height: 75px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #ff4b4b 0%, #e62429 100%);
+    border: 2px solid rgba(255,255,255,0.3);
+    color: white;
+    font-size: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 0 25px rgba(230, 36, 41, 0.8);
+    transition: all 0.3s ease;
+}
+
+.circular-play-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 40px rgba(230, 36, 41, 1);
+    background: radial-gradient(circle, #ff6b6b 0%, #ff0000 100%);
+}
+
+/* =========================================
+   OLD DETAIL PAGE LAYOUT (Kept just in case)
+========================================= */
 .split-layout {
     display: flex;
     padding: 0 10%;
@@ -175,7 +304,7 @@ body.theme-loki { --theme-color: #2e7d32; }
     padding: 40px;
     border-radius: 20px;
     width: 450px;
-    max-width: 90%; /* Ensures it doesn't overflow on small screens */
+    max-width: 90%;
     position: relative;
     border: 1px solid #333;
 }
@@ -194,11 +323,158 @@ body.theme-loki { --theme-color: #2e7d32; }
 }
 
 /* =========================================
-   MOBILE RESPONSIVENESS (NEW)
+   STRICT SHOP LAYOUT (SMALL CARDS)
 ========================================= */
-@media (max-width: 768px) {
+
+.shop-wrapper {
+    width: 100%;
+    padding: 40px 10%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.shop-header h2 {
+    font-family: 'Oswald', sans-serif;
+    font-size: 4rem;
+    color: white;
+    letter-spacing: 5px;
+    margin-bottom: 40px;
+    text-transform: uppercase;
+}
+
+.product-gallery {
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.product-item {
+    width: 280px !important;
+    background: transparent;
+    border: 1px solid var(--theme-color, #ffcc00);
+    border-radius: 10px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    transition: transform 0.3s ease;
+}
+
+.product-item:hover {
+    transform: translateY(-5px);
+}
+
+.product-image-box {
+    width: 100% !important;
+    height: 320px !important;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    background-color: #1a1a1a;
+}
+
+.product-image-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.product-details {
+    text-align: left;
+}
+
+.product-details h3 {
+    font-family: 'Oswald', sans-serif;
+    color: white;
+    font-size: 1.3rem;
+    margin: 0 0 15px 0;
+    letter-spacing: 1px;
+}
+
+/* SHOP BUTTONS */
+.button-group {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    margin-top: 15px;
+}
+
+.cart-btn, .buy-btn {
+    flex: 1;
+    padding: 10px 0;
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: 0.3s;
+    border-radius: 4px;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.cart-btn {
+    background: transparent;
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+.cart-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: white;
+}
+
+.buy-btn {
+    background: var(--theme-color, #ffcc00);
+    color: #000;
+    border: 1px solid var(--theme-color, #ffcc00);
+    font-weight: bold;
+}
+.buy-btn:hover {
+    background: white;
+    border-color: white;
+    color: black;
+}
+
+/* =========================================
+   MOBILE RESPONSIVENESS (UPDATED)
+========================================= */
+@media (max-width: 900px) {
+    /* New Cinematic Layout Mobile Adjustments */
+    .cinematic-container {
+        flex-direction: column;
+        justify-content: center;
+        padding: 100px 5% 40px 5%;
+        text-align: center;
+    }
+
+    .cinematic-container::before {
+        /* Even out the gradient on mobile */
+        background: rgba(10, 10, 12, 0.7); 
+    }
+
+    .movie-info-left, .movie-info-right {
+        max-width: 100%;
+        text-align: center;
+        align-items: center;
+        margin-top: 20px;
+    }
+
+    .movie-title {
+        font-size: 4rem;
+    }
+
+    .divider-line {
+        width: 100%;
+        margin: 20px 0;
+    }
+
+    /* Old Layout Adjustments */
     .split-layout {
-        flex-direction: column-reverse; /* Puts image on top, stats on bottom */
+        flex-direction: column-reverse;
         height: auto;
         padding: 100px 5% 40px 5%;
         gap: 30px;
@@ -216,12 +492,12 @@ body.theme-loki { --theme-color: #2e7d32; }
     }
 
     .right-stats h1 {
-        font-size: 4rem; /* Smaller font for mobile */
+        font-size: 4rem;
     }
 
     .stat-box {
         border-left: none;
-        border-top: 5px solid var(--theme-color); /* Moves theme line to top */
+        border-top: 5px solid var(--theme-color);
         border-radius: 0 0 10px 10px;
         text-align: left;
     }
@@ -230,128 +506,4 @@ body.theme-loki { --theme-color: #2e7d32; }
         top: 20px;
         left: 20px;
     }
-}
-/* =========================================
-   STRICT SHOP LAYOUT (SMALL CARDS)
-========================================= */
-
-.shop-wrapper {
-    width: 100%;
-    padding: 40px 10%; /* Keeps it aligned with your main layout */
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.shop-header h2 {
-    font-family: 'Oswald', sans-serif;
-    font-size: 4rem;
-    color: white;
-    letter-spacing: 5px;
-    margin-bottom: 40px;
-    text-transform: uppercase;
-}
-
-/* The container holding the shirts */
-.product-gallery {
-    display: flex;
-    justify-content: center;
-    gap: 50px; /* Space between shirts */
-    flex-wrap: wrap; /* Allows them to stack on small screens */
-    width: 100%;
-}
-
-/* THE STRICT CARD SIZING */
-.product-item {
-    width: 280px !important; /* Forces the box to stay small */
-    background: transparent;
-    border: 1px solid var(--theme-color, #ffcc00);
-    border-radius: 10px;
-    padding: 15px;
-    display: flex;
-    flex-direction: column;
-    box-sizing: border-box;
-    transition: transform 0.3s ease;
-}
-
-.product-item:hover {
-    transform: translateY(-5px); /* Nice little hover float effect */
-}
-
-/* THE STRICT IMAGE SIZING */
-.product-image-box {
-    width: 100% !important;
-    height: 320px !important; /* Forces the image to stay short */
-    border-radius: 8px;
-    overflow: hidden;
-    margin-bottom: 20px;
-    background-color: #1a1a1a; /* Dark background behind image */
-}
-
-.product-image-box img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* Crops the image perfectly to fit the 320px height */
-    object-position: center;
-}
-
-/* Product Text & Buttons */
-.product-details {
-    text-align: left;
-}
-
-.product-details h3 {
-    font-family: 'Oswald', sans-serif;
-    color: white;
-    font-size: 1.3rem;
-    margin: 0 0 15px 0;
-    letter-spacing: 1px;
-}
-
-/* =========================================
-   SHOP BUTTONS
-========================================= */
-.button-group {
-    display: flex;
-    gap: 10px;
-    width: 100%;
-    margin-top: 15px;
-}
-
-.cart-btn, .buy-btn {
-    flex: 1; /* Makes both buttons take up exactly 50% of the space */
-    padding: 10px 0;
-    font-family: 'Oswald', sans-serif;
-    font-size: 0.9rem;
-    letter-spacing: 1px;
-    cursor: pointer;
-    transition: 0.3s;
-    border-radius: 4px;
-    text-align: center;
-    text-transform: uppercase;
-}
-
-/* The Add to Cart Button (Outlined) */
-.cart-btn {
-    background: transparent;
-    color: white;
-    border: 1px solid rgba(255, 255, 255, 0.5);
-}
-.cart-btn:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: white;
-}
-
-/* The Buy Now Button (Solid Theme Color) */
-.buy-btn {
-    background: var(--theme-color, #ffcc00);
-    color: #000;
-    border: 1px solid var(--theme-color, #ffcc00);
-    font-weight: bold;
-}
-.buy-btn:hover {
-    background: white;
-    border-color: white;
-    color: black;
 }
