@@ -10,7 +10,7 @@
            CSS STYLING - CINEMATIC DASHBOARD
         ========================================= */
         :root {
-            --theme-color: #ffcc00; /* Iron Man Default */
+            --theme-color: #ffcc00; 
             --bg-dark: #0a0c10;
             --bg-darker: #050608;
             --text-light: #a0aabf;
@@ -41,290 +41,174 @@
             transition: background 0.5s ease;
         }
 
+        /* =========================================
+           EPIC CINEMATIC ANIMATIONS
+        ========================================= */
+        
+        /* 1. Continuous Floating Effect */
+        @keyframes hoverFloat {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0); }
+        }
+
+        /* 2. Holographic Scan Reveal */
+        @keyframes holoReveal {
+            0% { 
+                clip-path: inset(100% 0 0 0); 
+                opacity: 0; 
+                filter: brightness(2) drop-shadow(0 0 20px var(--theme-color)); 
+            }
+            50% { 
+                filter: brightness(1.5) drop-shadow(0 0 10px var(--theme-color)); 
+            }
+            100% { 
+                clip-path: inset(0 0 0 0); 
+                opacity: 1; 
+                filter: brightness(1) drop-shadow(0 0 0 transparent); 
+            }
+        }
+
+        .holo-anim {
+            animation: holoReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        /* 3. High-Tech Text Glitch */
+        @keyframes techGlitch {
+            0%, 96%, 98%, 100% { transform: translate(0); opacity: 1; text-shadow: none; }
+            97% { transform: translate(-2px, 2px); opacity: 0.9; text-shadow: 3px 0px red, -3px 0px cyan; }
+            99% { transform: translate(2px, -2px); opacity: 0.8; text-shadow: -3px 0px red, 3px 0px cyan; }
+        }
+
+        .glitch-text {
+            animation: techGlitch 4s infinite;
+        }
+
+        /* =========================================
+           CINEMATIC SPARKS BACKGROUND
+        ========================================= */
+        .sparks-container {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            pointer-events: none; z-index: 0; overflow: hidden;
+        }
+        .spark { position: absolute; bottom: -100vh; background: transparent; border-radius: 50%; }
+
+        .layer1 {
+            width: 2px; height: 2px;
+            box-shadow: 20vw 10vh 2px var(--theme-color), 40vw 30vh 2px var(--theme-color), 60vw 5vh 2px var(--theme-color), 80vw 50vh 2px var(--theme-color), 10vw 80vh 2px var(--theme-color), 90vw 20vh 2px var(--theme-color), 30vw 90vh 2px var(--theme-color), 70vw 70vh 2px var(--theme-color);
+            animation: sparks-rise 15s linear infinite; opacity: 0.8;
+        }
+        .layer2 {
+            width: 3px; height: 3px;
+            box-shadow: 15vw 15vh 3px var(--theme-color), 45vw 45vh 3px var(--theme-color), 75vw 25vh 3px var(--theme-color), 85vw 85vh 3px var(--theme-color), 5vw 60vh 3px var(--theme-color), 95vw 40vh 3px var(--theme-color), 25vw 75vh 3px var(--theme-color), 65vw 10vh 3px var(--theme-color);
+            animation: sparks-rise 25s linear infinite; opacity: 0.5;
+        }
+        .layer3 {
+            width: 5px; height: 5px;
+            box-shadow: 22vw 22vh 5px var(--theme-color), 55vw 55vh 5px var(--theme-color), 88vw 33vh 5px var(--theme-color), 12vw 88vh 5px var(--theme-color);
+            animation: sparks-rise 40s linear infinite; opacity: 0.3; filter: blur(2px);
+        }
+        @keyframes sparks-rise { 0% { transform: translateY(0); } 100% { transform: translateY(-200vh); } }
+
+
         /* LEFT SIDEBAR */
         .left-sidebar {
-            width: 280px;
-            height: 100vh;
-            background: rgba(10, 12, 16, 0.95);
-            border-right: 1px solid rgba(255, 255, 255, 0.05);
-            display: flex;
-            flex-direction: column;
-            z-index: 50;
-            backdrop-filter: blur(10px);
+            width: 280px; height: 100vh; background: rgba(10, 12, 16, 0.95); border-right: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex; flex-direction: column; z-index: 50; backdrop-filter: blur(10px);
         }
-
-        .brand-logo {
-            padding: 30px;
-            font-family: 'Oswald', sans-serif;
-            font-size: 2rem;
-            font-weight: 700;
-            letter-spacing: 2px;
-            color: white;
-        }
-
-        .thumbnail-list {
-            flex-grow: 1;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        }
+        .brand-logo { padding: 30px; font-family: 'Oswald', sans-serif; font-size: 2rem; font-weight: 700; letter-spacing: 2px; color: white; }
+        .thumbnail-list { flex-grow: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 5px; }
         .thumbnail-list::-webkit-scrollbar { display: none; }
-
-        .thumb-item {
-            position: relative;
-            height: 90px;
-            cursor: pointer;
-            overflow: hidden;
-            opacity: 0.5;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-        }
-
-        .thumb-item img {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            z-index: 1;
-            filter: grayscale(80%);
-            transition: all 0.3s ease;
-        }
-
-        .thumb-overlay {
-            position: absolute;
-            z-index: 2;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.2) 100%);
-        }
-
-        .thumb-name {
-            position: relative;
-            z-index: 3;
-            padding-left: 30px;
-            font-family: 'Oswald', sans-serif;
-            font-size: 0.9rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-
+        .thumb-item { position: relative; height: 90px; cursor: pointer; overflow: hidden; opacity: 0.5; transition: all 0.3s ease; display: flex; align-items: center; }
+        .thumb-item img { position: absolute; width: 100%; height: 100%; object-fit: cover; z-index: 1; filter: grayscale(80%); transition: all 0.3s ease; }
+        .thumb-overlay { position: absolute; z-index: 2; width: 100%; height: 100%; background: linear-gradient(90deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.2) 100%); }
+        .thumb-name { position: relative; z-index: 3; padding-left: 30px; font-family: 'Oswald', sans-serif; font-size: 0.9rem; letter-spacing: 2px; text-transform: uppercase; }
         .thumb-item:hover { opacity: 0.8; }
         .thumb-item.active { opacity: 1; border-left: 5px solid var(--theme-color); }
         .thumb-item.active img { filter: grayscale(0%); }
         .thumb-item.active .thumb-name { color: white; font-weight: 700; }
 
         /* MAIN CONTENT AREA */
-        .main-content {
-            flex-grow: 1;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            background-color: #050608;
-        }
+        .main-content { flex-grow: 1; position: relative; display: flex; flex-direction: column; background-color: #050608; }
 
         /* Top Right Elements */
-        .top-right-logo {
-            position: absolute;
-            top: 35px;
-            right: 120px; 
-            height: 25px;
-            z-index: 100;
-        }
+        .top-right-logo { position: absolute; top: 35px; right: 120px; height: 25px; z-index: 100; }
         .top-right-logo img { height: 100%; opacity: 0.9; }
+        .top-actions { position: absolute; top: 25px; right: 180px; z-index: 100; display: flex; gap: 15px; align-items: center; }
+        .signup-btn, .cart-btn-top { color: white; text-decoration: none; font-family: 'Oswald', sans-serif; letter-spacing: 2px; font-size: 0.9rem; padding: 10px 20px; transition: 0.3s; border: 1px solid rgba(255,255,255,0.3); border-radius: 5px; cursor: pointer; background: rgba(0,0,0,0.5); backdrop-filter: blur(5px); }
+        .signup-btn:hover, .cart-btn-top:hover { background: var(--theme-color); color: black; border-color: var(--theme-color); }
 
-        .top-actions {
-            position: absolute; 
-            top: 25px; 
-            right: 180px; 
-            z-index: 100;
-            display: flex;
-            gap: 15px;
-            align-items: center;
-        }
-        
-        .signup-btn, .cart-btn-top {
-            color: white; text-decoration: none; font-family: 'Oswald', sans-serif; 
-            letter-spacing: 2px; font-size: 0.9rem; padding: 10px 20px; transition: 0.3s;
-            border: 1px solid rgba(255,255,255,0.3); border-radius: 5px;
-            cursor: pointer;
-            background: rgba(0,0,0,0.5);
-            backdrop-filter: blur(5px);
-        }
-        
-        .signup-btn:hover, .cart-btn-top:hover { 
-            background: var(--theme-color); color: black; border-color: var(--theme-color);
-        }
-
-        /* =========================================
-           MASTER TABS & SCROLLING SETUP
-        ========================================= */
-        .master-tab {
-            display: none;
-            height: 100%;
-            width: 100%;
-            animation: fadeIn 0.4s ease forwards;
-            position: relative;
-            z-index: 10;
-            overflow-y: auto;
-            overflow-x: hidden;
-            scroll-behavior: smooth;
-        }
+        /* MASTER TABS */
+        .master-tab { display: none; height: 100%; width: 100%; animation: fadeIn 0.4s ease forwards; position: relative; z-index: 10; overflow-y: auto; overflow-x: hidden; scroll-behavior: smooth; }
         .master-tab.active-master { display: block; }
-        
         .master-tab::-webkit-scrollbar { width: 8px; }
         .master-tab::-webkit-scrollbar-track { background: rgba(0,0,0,0.5); }
         .master-tab::-webkit-scrollbar-thumb { background: var(--theme-color); border-radius: 10px; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(15px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .section-header {
-            font-family: 'Oswald', sans-serif;
-            font-size: 1.5rem;
-            letter-spacing: 4px;
-            color: var(--theme-color);
-            margin-bottom: 20px;
-            text-transform: uppercase;
-        }
-        .section-text { font-size: 1.1rem; line-height: 1.8; color: #cacedb; white-space: pre-wrap; max-width: 600px; }
-
-        /* =========================================
-           NEW CINEMATIC LAYOUT (PORTADA)
-        ========================================= */
-        .cinematic-container {
-            position: relative;
-            width: 100%;
-            height: 100vh;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 5%;
-            box-sizing: border-box;
-            
-            background-size: contain; 
-            background-position: center bottom; 
-            background-repeat: no-repeat;
-            transition: background-image 0.5s ease;
-        }
-
-        .cinematic-container::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(90deg, rgba(5,6,8,0.95) 0%, rgba(5,6,8,0.3) 40%, rgba(5,6,8,0.3) 60%, rgba(5,6,8,0.95) 100%),
-                        linear-gradient(0deg, rgba(5,6,8,0.9) 0%, transparent 20%);
-            z-index: 1;
-        }
-
-        .movie-info-left, .movie-info-right {
-            position: relative;
-            z-index: 2;
-            color: white;
-        }
-
-        .movie-info-left {
-            max-width: 450px;
-            margin-top: 5vh;
-        }
-
-        .movie-title {
-            font-family: 'Oswald', sans-serif;
-            font-size: 6rem;
-            font-weight: 700;
-            margin: 0;
-            line-height: 1;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            text-shadow: 2px 4px 15px rgba(0,0,0,0.8);
-        }
-
-        .character-name {
-            font-size: 1rem;
-            color: var(--theme-color);
-            letter-spacing: 4px;
-            margin-top: 15px;
-            font-weight: bold;
-        }
-
-        .divider-line {
-            width: 150%;
-            height: 3px;
-            background-color: var(--theme-color);
-            margin: 30px 0;
-            box-shadow: 0 0 10px var(--theme-color);
-            transition: background-color 0.5s ease;
-        }
-
-        .movie-info-right {
-            max-width: 380px;
-            text-align: right;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            margin-top: 5vh;
-        }
-
-        .description-text {
-            font-size: 1rem;
-            line-height: 1.7;
-            color: #d0d0d0;
-            text-shadow: 1px 1px 5px rgba(0,0,0,0.9);
-        }
-
-        .right-line { width: 100%; margin: 30px 0; }
-
-        .circular-play-btn {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            background: transparent;
-            border: 2px solid var(--theme-color);
-            color: var(--theme-color);
-            font-size: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .circular-play-btn::after {
-            content: '';
-            position: absolute;
-            top: 5px; left: 5px; right: 5px; bottom: 5px;
-            border-radius: 50%;
-            background: var(--theme-color);
-            opacity: 0.2;
-            transition: 0.3s;
-        }
-
-        .circular-play-btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 30px var(--theme-color);
-            background: var(--theme-color);
-            color: #000;
-        }
+        /* SCROLLING LAYOUT (BATTLEFIELD STYLE) */
+        .scroll-section { position: relative; width: 100%; min-height: 100vh; padding: 100px 8%; display: flex; align-items: center; }
+        .hero-section { justify-content: flex-start; }
         
-        .circular-play-btn:hover::after { opacity: 0; }
+        .movie-info-left { position: relative; z-index: 10; max-width: 500px; }
+        .movie-title { font-family: 'Oswald', sans-serif; font-size: 7rem; font-weight: 700; margin: 0; line-height: 1; letter-spacing: 3px; text-transform: uppercase; text-shadow: 2px 4px 15px rgba(0,0,0,0.8); color: white;}
+        .character-name { font-size: 1.2rem; color: var(--theme-color); letter-spacing: 4px; margin-top: 15px; font-weight: bold; }
+        .divider-line { width: 150%; height: 4px; background-color: var(--theme-color); margin: 30px 0; box-shadow: 0 0 15px var(--theme-color); transition: background-color 0.5s ease; }
 
-        /* =========================================
-           OTHER LAYOUTS & SHOP
-        ========================================= */
-        /* Fixed syntax for VS Code: Using direct static path instead of url_for */
-        .full-page-content { padding: 100px; width: 100%; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; background: url('/static/marvel_background.jpg') center top/cover fixed;}
-        .full-page-content::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(5,6,8,0.85); z-index: 0; }
-        .full-page-content > * { position: relative; z-index: 1; }
-        
+        /* Hero Cutout Fix (Contain + Bottom) */
+        .hero-bg-cutout {
+            position: absolute; right: 5%; bottom: 0; height: 90vh; z-index: 1;
+            filter: drop-shadow(-20px 20px 30px rgba(0,0,0,0.8)); pointer-events: none;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            object-fit: contain; object-position: center bottom;
+        }
+
+        .diagonal-accent { position: absolute; width: 150%; height: 200px; background: var(--theme-color); transform: rotate(-15deg); z-index: 0; opacity: 0.05; transition: background 0.5s ease; }
+        .accent-1 { top: 20%; left: -20%; }
+        .accent-2 { bottom: -100px; right: -20%; }
+
+        .feature-section { background: rgba(255,255,255,0.02); border-top: 1px solid rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; gap: 50px; min-height: 70vh; }
+        .feature-image { flex: 1; display: flex; justify-content: center; }
+        .feature-image img { max-height: 60vh; border-radius: 10px; filter: drop-shadow(0 20px 30px rgba(0,0,0,0.9)); transition: 0.5s ease; }
+        .feature-content { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+        .big-header { font-family: 'Oswald', sans-serif; font-size: 2.5rem; line-height: 1.1; margin-bottom: 20px; color: var(--theme-color); letter-spacing: 4px; text-transform: uppercase;}
+        .big-header span { color: white; font-size: 1.2rem; display: block; letter-spacing: 5px; margin-top: 10px;}
+
+        .action-btn { background: transparent; color: white; border: 2px solid var(--theme-color); padding: 15px 40px; font-family: 'Oswald', sans-serif; font-size: 1.2rem; letter-spacing: 3px; cursor: pointer; transition: all 0.3s; width: fit-content; text-transform: uppercase; box-shadow: 0 0 15px rgba(0,0,0,0.5); border-radius: 5px; }
+        .action-btn:hover { background: var(--theme-color); color: black; transform: scale(1.05); box-shadow: 0 0 25px var(--theme-color); }
+
+        .centerpiece-section { display: flex; justify-content: space-between; align-items: center; min-height: 80vh; text-align: center; }
+        .side-text-block { flex: 1; text-align: left; padding: 0 40px; }
+        .side-text-block.right { text-align: right; }
+        .side-text-block h3 { font-family: 'Oswald', sans-serif; font-size: 1.5rem; color: white; letter-spacing: 2px; margin-bottom: 15px; text-transform: uppercase; }
+        .side-text-block p { color: var(--text-light); font-size: 0.95rem; line-height: 1.6; }
+        .center-focus { flex: 1; position: relative; display: flex; justify-content: center; align-items: center; height: 600px; }
+        .center-bg-box { position: absolute; width: 250px; height: 400px; background: var(--theme-color); z-index: 1; transition: 0.5s ease; border-radius: 10px; opacity: 0.8;}
+        .center-focus img { position: relative; z-index: 2; height: 110%; filter: drop-shadow(0px 20px 20px rgba(0,0,0,0.8)); transition: 0.5s ease; object-fit: contain;}
+
+        .roster-section { flex-direction: column; align-items: flex-start; padding-bottom: 150px; }
+        .roster-grid { display: flex; gap: 20px; width: 100%; margin-top: 50px; justify-content: space-between; }
+        .roster-card { flex: 1; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); height: 500px; display: flex; flex-direction: column; transition: transform 0.2s ease-out, box-shadow 0.2s ease-out; cursor: pointer; position: relative; overflow: hidden; transform-style: preserve-3d; perspective: 1000px;}
+        .roster-card:hover { transform: rotateX(5deg) rotateY(-5deg) scale(1.05); box-shadow: -15px 15px 30px rgba(0,0,0, 0.4); border-color: var(--theme-color); z-index: 10; background: rgba(255,255,255,0.08); }
+        .roster-card-img { height: 70%; width: 100%; background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; padding: 20px; }
+        .roster-card-img img { max-height: 100%; max-width: 100%; object-fit: contain; opacity: 0.8; transition: 0.3s; }
+        .roster-card:hover .roster-card-img img { opacity: 1; transform: scale(1.1); }
+        .roster-card-info { padding: 20px; border-top: 1px solid rgba(255,255,255,0.05); }
+        .roster-card-info h4 { font-family: 'Oswald', sans-serif; font-size: 1.2rem; color: white; letter-spacing: 2px; margin-bottom: 10px; }
+        .stat-bar { display: flex; align-items: center; margin-bottom: 5px; font-size: 0.7rem; color: var(--text-light); }
+        .stat-bar span { width: 60px; }
+        .stat-fill { flex: 1; height: 4px; background: rgba(255,255,255,0.1); margin-left: 10px; position: relative; }
+        .stat-fill::after { content: ''; position: absolute; top: 0; left: 0; height: 100%; background: var(--theme-color); transition: 0.5s ease; }
+
+        /* OTHER LAYOUTS & SHOP */
         .character-title { display: flex; flex-direction: column; font-family: 'Oswald', sans-serif; font-size: 8rem; line-height: 0.9; margin-bottom: 30px; text-transform: uppercase; letter-spacing: 5px; }
         .title-bold { font-weight: 700; color: white; }
         .title-light { font-weight: 300; color: var(--theme-color); }
-
+        .full-page-content { padding: 100px; width: 100%; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; background: url('/static/marvel_background.jpg') center top/cover fixed;}
+        .full-page-content::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(5,6,8,0.85); z-index: 0; }
+        .full-page-content > * { position: relative; z-index: 1; }
+        .section-text { font-size: 1.1rem; line-height: 1.8; color: #cacedb; white-space: pre-wrap; max-width: 600px; }
+        
         .history-columns { display: column; column-count: 2; column-gap: 50px; margin-top: 30px; }
         .poster-container { display: flex; justify-content: center; align-items: center; min-height: 100vh; width: 100%; background: #050608; }
         .poster-image { height: 80vh; border-radius: 15px; box-shadow: 0 20px 50px rgba(0,0,0,0.9); border: 2px solid rgba(255,255,255,0.1); }
@@ -332,7 +216,7 @@
         .hud-box { background: rgba(0, 20, 40, 0.4); border: 1px solid var(--theme-color); padding: 30px; border-radius: 10px; backdrop-filter: blur(5px); }
         .hud-title { font-family: 'Oswald', sans-serif; color: white; letter-spacing: 2px; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 10px; }
 
-        .shop-wrapper { width: 100%; padding: 100px 10%; display: flex; flex-direction: column; align-items: center; background: #050608; min-height: 100vh;}
+        .shop-wrapper { width: 100%; padding: 100px 10%; display: flex; flex-direction: column; align-items: center; min-height: 100vh;}
         .shop-header h2 { font-family: 'Oswald', sans-serif; font-size: 4rem; color: white; letter-spacing: 5px; margin-bottom: 40px; text-transform: uppercase; }
         .product-gallery { display: flex; justify-content: center; gap: 50px; flex-wrap: wrap; width: 100%; }
         .product-item { width: 280px; background: rgba(0,0,0,0.6); border: 1px solid var(--theme-color); border-radius: 10px; padding: 15px; display: flex; flex-direction: column; transition: transform 0.3s ease; backdrop-filter: blur(5px); }
@@ -349,49 +233,24 @@
         .buy-btn { background: var(--theme-color, #ffcc00); color: #000; border: 1px solid var(--theme-color, #ffcc00); font-weight: bold; }
         .buy-btn:hover { background: white; border-color: white; color: black; }
 
-        /* =========================================
-           CART MODAL STYLES
-        ========================================= */
-        .modal-overlay {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(0, 0, 0, 0.85); z-index: 1000; justify-content: center; align-items: center;
-            backdrop-filter: blur(5px);
-        }
-        .modal-content {
-            background-color: #0c1015; padding: 40px; border-radius: 10px; width: 500px;
-            max-width: 90%; position: relative; border: 1px solid var(--theme-color);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
-        }
-        .close-btn {
-            position: absolute; top: 15px; right: 25px; font-size: 30px; cursor: pointer; color: #a0aabf; transition: 0.3s;
-        }
+        /* CART MODAL STYLES */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.85); z-index: 1000; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
+        .modal-content { background-color: #0c1015; padding: 40px; border-radius: 10px; width: 500px; max-width: 90%; position: relative; border: 1px solid var(--theme-color); box-shadow: 0 20px 50px rgba(0,0,0,0.8); }
+        .close-btn { position: absolute; top: 15px; right: 25px; font-size: 30px; cursor: pointer; color: #a0aabf; transition: 0.3s; }
         .close-btn:hover { color: var(--theme-color); }
-        .cart-item-row {
-            display: flex; justify-content: space-between; padding: 15px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.1); align-items: center;
-        }
+        .cart-item-row { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid rgba(255,255,255,0.1); align-items: center; }
         .cart-item-name { font-family: 'Oswald', sans-serif; color: white; font-size: 1.1rem; }
         .cart-item-price { color: var(--theme-color); font-weight: bold; }
 
-        /* =========================================
-           RIGHT SIDEBAR
-        ========================================= */
-        .right-sidebar {
-            width: 80px; height: 100vh; background: rgba(10, 12, 16, 0.95); border-left: 1px solid rgba(255, 255, 255, 0.05);
-            display: flex; flex-direction: column; align-items: center; z-index: 50; position: relative;
-        }
+        /* RIGHT SIDEBAR */
+        .right-sidebar { width: 80px; height: 100vh; background: rgba(10, 12, 16, 0.95); border-left: 1px solid rgba(255, 255, 255, 0.05); display: flex; flex-direction: column; align-items: center; z-index: 50; position: relative; }
         .v-nav-item { width: 100%; height: 160px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.4s ease; }
         .v-text { writing-mode: vertical-rl; transform: rotate(180deg); font-family: 'Oswald', sans-serif; font-size: 0.8rem; letter-spacing: 5px; color: var(--text-light); pointer-events: none; }
         .v-nav-item:hover .v-text { color: white; }
         .v-nav-item.active-v-nav { background-color: var(--theme-color); }
         .v-nav-item.active-v-nav .v-text { color: var(--bg-darker); font-weight: 700; }
 
-        #music-btn {
-            position: absolute; bottom: 40px; left: 320px; padding: 10px 20px;
-            background: rgba(255, 255, 255, 0.05); color: #a0aabf; border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 30px; font-family: 'Oswald', sans-serif; letter-spacing: 2px;
-            cursor: pointer; font-size: 0.8rem; transition: 0.3s; z-index: 100; backdrop-filter: blur(5px);
-        }
+        #music-btn { position: absolute; bottom: 40px; left: 320px; padding: 10px 20px; background: rgba(255, 255, 255, 0.05); color: #a0aabf; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 30px; font-family: 'Oswald', sans-serif; letter-spacing: 2px; cursor: pointer; font-size: 0.8rem; transition: 0.3s; z-index: 100; backdrop-filter: blur(5px); }
         #music-btn:hover, #music-btn.playing { color: var(--theme-color); border-color: var(--theme-color); }
     </style>
 </head>
@@ -402,52 +261,47 @@
     </audio>
     <button id="music-btn" onclick="toggleMusic()">🎵 PLAY THEME</button>
 
+    <div class="sparks-container">
+        <div class="spark layer1"></div>
+        <div class="spark layer2"></div>
+        <div class="spark layer3"></div>
+    </div>
+
     <aside class="left-sidebar">
         <div class="brand-logo">MARVEL</div>
         <div class="thumbnail-list">
             <div class="thumb-item" id="thumb-spiderman" onclick="selectCharacter('spiderman')">
-                <img src="/static/spiderman_thumbnail.png" alt="Spider-Man">
-                <div class="thumb-overlay"></div><span class="thumb-name">SPIDER-MAN</span>
+                <img src="/static/spiderman_thumbnail.png" alt="Spider-Man"><div class="thumb-overlay"></div><span class="thumb-name">SPIDER-MAN</span>
             </div>
             <div class="thumb-item" id="thumb-captain_america" onclick="selectCharacter('captain_america')">
-                <img src="/static/cap_thumbnail.png" alt="Cap">
-                <div class="thumb-overlay"></div><span class="thumb-name">CAPTAIN AMERICA</span>
+                <img src="/static/cap_thumbnail.png" alt="Cap"><div class="thumb-overlay"></div><span class="thumb-name">CAPTAIN AMERICA</span>
             </div>
             <div class="thumb-item active" id="thumb-iron_man" onclick="selectCharacter('iron_man')">
-                <img src="/static/ironman_thumbnail.png" alt="Iron Man">
-                <div class="thumb-overlay"></div><span class="thumb-name">IRON MAN</span>
+                <img src="/static/ironman_thumbnail.png" alt="Iron Man"><div class="thumb-overlay"></div><span class="thumb-name">IRON MAN</span>
             </div>
             <div class="thumb-item" id="thumb-thor" onclick="selectCharacter('thor')">
-                <img src="/static/thor_thumbnail.png" alt="Thor">
-                <div class="thumb-overlay"></div><span class="thumb-name">THOR</span>
+                <img src="/static/thor_thumbnail.png" alt="Thor"><div class="thumb-overlay"></div><span class="thumb-name">THOR</span>
             </div>
             <div class="thumb-item" id="thumb-hulk" onclick="selectCharacter('hulk')">
-                <img src="/static/hulk_thumbnail.png" alt="Hulk">
-                <div class="thumb-overlay"></div><span class="thumb-name">HULK</span>
+                <img src="/static/hulk_thumbnail.png" alt="Hulk"><div class="thumb-overlay"></div><span class="thumb-name">HULK</span>
             </div>
             <div class="thumb-item" id="thumb-scarlet_witch" onclick="selectCharacter('scarlet_witch')">
-                <img src="/static/scarlet_witch_thumbnail.png" alt="Scarlet">
-                <div class="thumb-overlay"></div><span class="thumb-name">SCARLET WITCH</span>
+                <img src="/static/scarlet_witch_thumbnail.png" alt="Scarlet"><div class="thumb-overlay"></div><span class="thumb-name">SCARLET WITCH</span>
             </div>
             <div class="thumb-item" id="thumb-black_widow" onclick="selectCharacter('black_widow')">
-                <img src="/static/black_widow_thumbnail.png" alt="Black Widow">
-                <div class="thumb-overlay"></div><span class="thumb-name">BLACK WIDOW</span>
+                <img src="/static/black_widow_thumbnail.png" alt="Black Widow"><div class="thumb-overlay"></div><span class="thumb-name">BLACK WIDOW</span>
             </div>
             <div class="thumb-item" id="thumb-dr_strange" onclick="selectCharacter('dr_strange')">
-                <img src="/static/dr_strange_thumbnail.png" alt="Dr. Strange">
-                <div class="thumb-overlay"></div><span class="thumb-name">DR. STRANGE</span>
+                <img src="/static/dr_strange_thumbnail.png" alt="Dr. Strange"><div class="thumb-overlay"></div><span class="thumb-name">DR. STRANGE</span>
             </div>
             <div class="thumb-item" id="thumb-loki" onclick="selectCharacter('loki')">
-                <img src="/static/loki_thumbnail.png" alt="Loki">
-                <div class="thumb-overlay"></div><span class="thumb-name">LOKI</span>
+                <img src="/static/loki_thumbnail.png" alt="Loki"><div class="thumb-overlay"></div><span class="thumb-name">LOKI</span>
             </div>
             <div class="thumb-item" id="thumb-hawkeye" onclick="selectCharacter('hawkeye')">
-                <img src="/static/hawkeye_thumbnail.png" alt="Hawkeye">
-                <div class="thumb-overlay"></div><span class="thumb-name">HAWKEYE</span>
+                <img src="/static/hawkeye_thumbnail.png" alt="Hawkeye"><div class="thumb-overlay"></div><span class="thumb-name">HAWKEYE</span>
             </div>
             <div class="thumb-item" id="thumb-thanos" onclick="selectCharacter('thanos')">
-                <img src="/static/thanos_thumbnail.png" alt="Thanos">
-                <div class="thumb-overlay"></div><span class="thumb-name">THANOS</span>
+                <img src="/static/thanos_thumbnail.png" alt="Thanos"><div class="thumb-overlay"></div><span class="thumb-name">THANOS</span>
             </div>
         </div>
     </aside>
@@ -464,38 +318,98 @@
         </div>
 
         <div id="master-portada" class="master-tab active-master">
+            <div class="diagonal-accent accent-1"></div>
             
-            <div id="cinematic-bg" class="cinematic-container" style="background-image: url('/static/ironman_cutout.png');">
-                
+            <div class="scroll-section hero-section">
                 <div class="movie-info-left">
-                    <h1 class="movie-title">
+                    <h1 class="movie-title glitch-text">
                         <span id="title-first">IRON</span> <br> <span id="title-second" style="color: var(--theme-color);">MAN</span>
                     </h1>
                     <p class="character-name">— <span id="realName">TONY STARK</span> —</p>
                     
                     <div class="divider-line"></div>
                     
-                    <p id="castInfo" class="cast-text">Select a hero to view their classified archives and combat data.</p>
-                </div>
-
-                <div class="movie-info-right">
-                    <p id="detail-synopsis" class="description-text">
-                        After a life-threatening incident, Tony Stark creates a mechanized suit of armor to save his own life and escape captivity. He continues to refine his technology, fighting foes in a high-tech suit.
-                    </p>
-                    
-                    <div class="divider-line right-line"></div>
-                    
-                    <button id="playTrailerBtn" class="circular-play-btn">
-                        ▶
+                    <button id="playTrailerBtn" class="action-btn">
+                        ▶ PLAY TRAILER
                     </button>
                 </div>
                 
+                <img class="hero-bg-cutout holo-anim" id="detail-image" src="/static/ironman_cutout.png" alt="Hero Standee" style="animation: hoverFloat 6s ease-in-out infinite, holoReveal 0.8s forwards;">
+            </div>
+
+            <div class="scroll-section feature-section">
+                <div class="feature-image">
+                    <img id="feature-image" src="/static/ironman_thumbnail.png" alt="Suit Display">
+                </div>
+                <div class="feature-content">
+                    <h2 class="big-header">OFFICIAL ARCHIVES<br><span>DATABASE LOADED</span></h2>
+                    <p class="section-text" id="detail-synopsis">After a life-threatening incident, Tony Stark creates a mechanized suit of armor to save his own life and escape captivity. He continues to refine his technology, fighting foes in a high-tech suit.</p>
+                </div>
+            </div>
+
+            <div class="scroll-section centerpiece-section">
+                <div class="diagonal-accent accent-2"></div>
+                <div class="side-text-block">
+                    <h3>CUSTOMIZE YOUR GEAR</h3>
+                    <p>Your journey through the Marvel Universe is entirely unique. Review the tactical data and prepare for the battle ahead.</p>
+                </div>
+                <div class="center-focus">
+                    <div class="center-bg-box"></div>
+                    <img id="center-image" src="/static/ironman_cutout.png" alt="Center Hero">
+                </div>
+                <div class="side-text-block right">
+                    <h3>NEVER BE THE SAME</h3>
+                    <p>The most intense, immersive combat experience yet. Every battle is different. Every upgrade matters.</p>
+                </div>
+            </div>
+
+            <div class="scroll-section roster-section">
+                <h2 class="big-header" style="text-align: left;">UPGRADE YOUR<br><span style="color:white; margin-top:0;">ARMORY</span></h2>
+                
+                <div class="roster-grid">
+                    <div class="roster-card">
+                        <div class="roster-card-img"><img src="/static/ironman_cutout.png"></div>
+                        <div class="roster-card-info">
+                            <h4>MARK I ARMOR</h4>
+                            <div class="stat-bar"><span>DAMAGE</span><div class="stat-fill" style="width: 80%;"></div></div>
+                            <div class="stat-bar"><span>MOBILITY</span><div class="stat-fill" style="width: 30%;"></div></div>
+                            <div class="stat-bar"><span>DEFENSE</span><div class="stat-fill" style="width: 90%;"></div></div>
+                        </div>
+                    </div>
+                    <div class="roster-card">
+                        <div class="roster-card-img"><img src="/static/spiderman_cutout.png"></div>
+                        <div class="roster-card-info">
+                            <h4>IRON SPIDER</h4>
+                            <div class="stat-bar"><span>DAMAGE</span><div class="stat-fill" style="width: 70%;"></div></div>
+                            <div class="stat-bar"><span>MOBILITY</span><div class="stat-fill" style="width: 100%;"></div></div>
+                            <div class="stat-bar"><span>DEFENSE</span><div class="stat-fill" style="width: 60%;"></div></div>
+                        </div>
+                    </div>
+                    <div class="roster-card">
+                        <div class="roster-card-img"><img src="/static/cap_cutout.png"></div>
+                        <div class="roster-card-info">
+                            <h4>VIBRANIUM SHIELD</h4>
+                            <div class="stat-bar"><span>DAMAGE</span><div class="stat-fill" style="width: 60%;"></div></div>
+                            <div class="stat-bar"><span>MOBILITY</span><div class="stat-fill" style="width: 70%;"></div></div>
+                            <div class="stat-bar"><span>DEFENSE</span><div class="stat-fill" style="width: 100%;"></div></div>
+                        </div>
+                    </div>
+                    <div class="roster-card">
+                        <div class="roster-card-img"><img src="/static/thor_cutout.png"></div>
+                        <div class="roster-card-info">
+                            <h4>STORMBREAKER</h4>
+                            <div class="stat-bar"><span>DAMAGE</span><div class="stat-fill" style="width: 100%;"></div></div>
+                            <div class="stat-bar"><span>MOBILITY</span><div class="stat-fill" style="width: 80%;"></div></div>
+                            <div class="stat-bar"><span>DEFENSE</span><div class="stat-fill" style="width: 80%;"></div></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
         <div id="master-historia" class="master-tab">
             <div class="full-page-content">
-                <h1 class="character-title"><span class="title-bold">COMIC</span><span class="title-light">ORIGIN</span></h1>
+                <h1 class="character-title glitch-text"><span class="title-bold">COMIC</span><span class="title-light">ORIGIN</span></h1>
                 <h2 class="section-header">ARCHIVE RECORDS</h2>
                 <div class="history-columns">
                     <p class="section-text" id="detail-history">Database loading...</p>
@@ -505,13 +419,13 @@
 
         <div id="master-poster" class="master-tab">
             <div class="poster-container">
-                <img class="poster-image" id="detail-poster" src="/static/ironman_thumbnail.png" alt="Movie Poster">
+                <img class="poster-image holo-anim" id="detail-poster" src="/static/ironman_thumbnail.png" alt="Movie Poster">
             </div>
         </div>
 
         <div id="master-diseno" class="master-tab">
             <div class="full-page-content">
-                <h1 class="character-title"><span class="title-bold">TECH</span><span class="title-light">SPECS</span></h1>
+                <h1 class="character-title glitch-text"><span class="title-bold">TECH</span><span class="title-light">SPECS</span></h1>
                 <div class="hud-grid">
                     <div class="hud-box">
                         <h3 class="hud-title">COMBAT RATING</h3>
@@ -532,12 +446,9 @@
                 </div>
                 <div class="product-gallery">
                     <div class="product-item">
-                        <div class="product-image-box">
-                            <img src="/static/ironman_shirt.png" alt="Iron Man Tech Tee">
-                        </div>
+                        <div class="product-image-box"><img src="/static/ironman_shirt.png" alt="Iron Man Tech Tee"></div>
                         <div class="product-details">
-                            <h3>Iron Man Tech Tee</h3>
-                            <div class="product-price">₹4,500</div>
+                            <h3>Iron Man Tech Tee</h3><div class="product-price">₹4,500</div>
                             <div class="button-group">
                                 <button class="cart-btn" onclick="addToCart('Iron Man Tech Tee', 4500, event)">ADD TO CART</button>
                                 <button class="buy-btn" onclick="initiatePayment(4500)">BUY NOW</button>
@@ -546,12 +457,9 @@
                     </div>
                     
                     <div class="product-item">
-                        <div class="product-image-box">
-                            <img src="/static/spidey_shirt.png" alt="Spider-Man Streetwear">
-                        </div>
+                        <div class="product-image-box"><img src="/static/spidey_shirt.png" alt="Spider-Man Streetwear"></div>
                         <div class="product-details">
-                            <h3>Spider-Man Streetwear</h3>
-                            <div class="product-price">₹5,600</div>
+                            <h3>Spider-Man Streetwear</h3><div class="product-price">₹5,600</div>
                             <div class="button-group">
                                 <button class="cart-btn" onclick="addToCart('Spider-Man Streetwear', 5600, event)">ADD TO CART</button>
                                 <button class="buy-btn" onclick="initiatePayment(5600)">BUY NOW</button>
@@ -560,12 +468,9 @@
                     </div>
 
                     <div class="product-item">
-                        <div class="product-image-box">
-                            <img src="/static/cap_shirt.png" alt="Captain America Shield Tee">
-                        </div>
+                        <div class="product-image-box"><img src="/static/cap_shirt.png" alt="Captain America Shield Tee"></div>
                         <div class="product-details">
-                            <h3>Captain America Shield Tee</h3>
-                            <div class="product-price">₹4,800</div>
+                            <h3>Captain America Shield Tee</h3><div class="product-price">₹4,800</div>
                             <div class="button-group">
                                 <button class="cart-btn" onclick="addToCart('Captain America Shield Tee', 4800, event)">ADD TO CART</button>
                                 <button class="buy-btn" onclick="initiatePayment(4800)">BUY NOW</button>
@@ -574,12 +479,9 @@
                     </div>
 
                     <div class="product-item">
-                        <div class="product-image-box">
-                            <img src="/static/loki_shirt.png" alt="God of Mischief Hoodie">
-                        </div>
+                        <div class="product-image-box"><img src="/static/loki_shirt.png" alt="God of Mischief Hoodie"></div>
                         <div class="product-details">
-                            <h3>God of Mischief Hoodie</h3>
-                            <div class="product-price">₹5,500</div>
+                            <h3>God of Mischief Hoodie</h3><div class="product-price">₹5,500</div>
                             <div class="button-group">
                                 <button class="cart-btn" onclick="addToCart('God of Mischief Hoodie', 5500, event)">ADD TO CART</button>
                                 <button class="buy-btn" onclick="initiatePayment(5500)">BUY NOW</button>
@@ -588,12 +490,9 @@
                     </div>
 
                     <div class="product-item">
-                        <div class="product-image-box">
-                            <img src="/static/thor_shirt.png" alt="Thor Stormbreaker Tee">
-                        </div>
+                        <div class="product-image-box"><img src="/static/thor_shirt.png" alt="Thor Stormbreaker Tee"></div>
                         <div class="product-details">
-                            <h3>Thor Stormbreaker Tee</h3>
-                            <div class="product-price">₹4,200</div>
+                            <h3>Thor Stormbreaker Tee</h3><div class="product-price">₹4,200</div>
                             <div class="button-group">
                                 <button class="cart-btn" onclick="addToCart('Thor Stormbreaker Tee', 4200, event)">ADD TO CART</button>
                                 <button class="buy-btn" onclick="initiatePayment(4200)">BUY NOW</button>
@@ -602,12 +501,9 @@
                     </div>
 
                     <div class="product-item">
-                        <div class="product-image-box">
-                            <img src="/static/hulk_shirt.png" alt="Hulk Gamma Graphic Tee">
-                        </div>
+                        <div class="product-image-box"><img src="/static/hulk_shirt.png" alt="Hulk Gamma Graphic Tee"></div>
                         <div class="product-details">
-                            <h3>Hulk Gamma Graphic Tee</h3>
-                            <div class="product-price">₹4,000</div>
+                            <h3>Hulk Gamma Graphic Tee</h3><div class="product-price">₹4,000</div>
                             <div class="button-group">
                                 <button class="cart-btn" onclick="addToCart('Hulk Gamma Graphic Tee', 4000, event)">ADD TO CART</button>
                                 <button class="buy-btn" onclick="initiatePayment(4000)">BUY NOW</button>
@@ -616,12 +512,9 @@
                     </div>
 
                     <div class="product-item">
-                        <div class="product-image-box">
-                            <img src="/static/scarlet_witch_shirt.png" alt="Scarlet Witch Chaos Hoodie">
-                        </div>
+                        <div class="product-image-box"><img src="/static/scarlet_witch_shirt.png" alt="Scarlet Witch Chaos Hoodie"></div>
                         <div class="product-details">
-                            <h3>Scarlet Witch Chaos Hoodie</h3>
-                            <div class="product-price">₹5,800</div>
+                            <h3>Scarlet Witch Chaos Hoodie</h3><div class="product-price">₹5,800</div>
                             <div class="button-group">
                                 <button class="cart-btn" onclick="addToCart('Scarlet Witch Chaos Hoodie', 5800, event)">ADD TO CART</button>
                                 <button class="buy-btn" onclick="initiatePayment(5800)">BUY NOW</button>
@@ -630,12 +523,9 @@
                     </div>
 
                     <div class="product-item">
-                        <div class="product-image-box">
-                            <img src="/static/dr_strange_shirt.png" alt="Sanctum Sanctorum Cloak Tee">
-                        </div>
+                        <div class="product-image-box"><img src="/static/dr_strange_shirt.png" alt="Sanctum Sanctorum Cloak Tee"></div>
                         <div class="product-details">
-                            <h3>Sanctum Sanctorum Cloak Tee</h3>
-                            <div class="product-price">₹4,900</div>
+                            <h3>Sanctum Sanctorum Cloak Tee</h3><div class="product-price">₹4,900</div>
                             <div class="button-group">
                                 <button class="cart-btn" onclick="addToCart('Sanctum Sanctorum Cloak Tee', 4900, event)">ADD TO CART</button>
                                 <button class="buy-btn" onclick="initiatePayment(4900)">BUY NOW</button>
@@ -644,12 +534,9 @@
                     </div>
 
                     <div class="product-item">
-                        <div class="product-image-box">
-                            <img src="/static/hawkeye_shirt.png" alt="Hawkeye Bullseye Longsleeve">
-                        </div>
+                        <div class="product-image-box"><img src="/static/hawkeye_shirt.png" alt="Hawkeye Bullseye Longsleeve"></div>
                         <div class="product-details">
-                            <h3>Hawkeye Bullseye Longsleeve</h3>
-                            <div class="product-price">₹4,300</div>
+                            <h3>Hawkeye Bullseye Longsleeve</h3><div class="product-price">₹4,300</div>
                             <div class="button-group">
                                 <button class="cart-btn" onclick="addToCart('Hawkeye Bullseye Longsleeve', 4300, event)">ADD TO CART</button>
                                 <button class="buy-btn" onclick="initiatePayment(4300)">BUY NOW</button>
@@ -658,12 +545,9 @@
                     </div>
 
                     <div class="product-item">
-                        <div class="product-image-box">
-                            <img src="/static/thanos_shirt.png" alt="Infinity Gauntlet Heavy Tee">
-                        </div>
+                        <div class="product-image-box"><img src="/static/thanos_shirt.png" alt="Infinity Gauntlet Heavy Tee"></div>
                         <div class="product-details">
-                            <h3>Infinity Gauntlet Heavy Tee</h3>
-                            <div class="product-price">₹6,000</div>
+                            <h3>Infinity Gauntlet Heavy Tee</h3><div class="product-price">₹6,000</div>
                             <div class="button-group">
                                 <button class="cart-btn" onclick="addToCart('Infinity Gauntlet Heavy Tee', 6000, event)">ADD TO CART</button>
                                 <button class="buy-btn" onclick="initiatePayment(6000)">BUY NOW</button>
@@ -677,21 +561,11 @@
     </main>
 
     <aside class="right-sidebar">
-        <div id="v-nav-portada" class="v-nav-item active-v-nav" onclick="switchRightTab(event, 'portada')">
-            <span class="v-text">PORTADA</span>
-        </div>
-        <div id="v-nav-historia" class="v-nav-item" onclick="switchRightTab(event, 'historia')">
-            <span class="v-text">HISTORIA</span>
-        </div>
-        <div id="v-nav-poster" class="v-nav-item" onclick="switchRightTab(event, 'poster')">
-            <span class="v-text">POSTER</span>
-        </div>
-        <div id="v-nav-diseno" class="v-nav-item" onclick="switchRightTab(event, 'diseno')">
-            <span class="v-text">DISEÑO</span>
-        </div>
-        <div id="v-nav-shop" class="v-nav-item" onclick="switchRightTab(event, 'shop')">
-            <span class="v-text">SHOP</span>
-        </div>
+        <div id="v-nav-portada" class="v-nav-item active-v-nav" onclick="switchRightTab(event, 'portada')"><span class="v-text">PORTADA</span></div>
+        <div id="v-nav-historia" class="v-nav-item" onclick="switchRightTab(event, 'historia')"><span class="v-text">HISTORIA</span></div>
+        <div id="v-nav-poster" class="v-nav-item" onclick="switchRightTab(event, 'poster')"><span class="v-text">POSTER</span></div>
+        <div id="v-nav-diseno" class="v-nav-item" onclick="switchRightTab(event, 'diseno')"><span class="v-text">DISEÑO</span></div>
+        <div id="v-nav-shop" class="v-nav-item" onclick="switchRightTab(event, 'shop')"><span class="v-text">SHOP</span></div>
     </aside>
 
     <div id="cart-modal" class="modal-overlay">
@@ -711,7 +585,6 @@
     </div>
 
     <script>
-        // Global variable for trailers
         let currentTrailerUrl = "https://www.youtube.com/watch?v=8ugaeA-nMTc"; // Default Iron Man Trailer
 
         const characters = {
@@ -827,14 +700,10 @@
             }
         };
 
-        // =========================================================================
-        // UI UPDATES & TAB SWITCHING
-        // =========================================================================
         function selectCharacter(id) {
             const char = characters[id];
             if (!char) return;
 
-            // 1. Update text elements
             if (document.getElementById('title-first')) document.getElementById('title-first').innerText = char.titleFirst;
             if (document.getElementById('title-second')) document.getElementById('title-second').innerText = char.titleSecond;
             if (document.getElementById('realName')) document.getElementById('realName').innerText = char.realName;
@@ -842,14 +711,28 @@
             if (document.getElementById('detail-history')) document.getElementById('detail-history').innerText = char.history;
             if (document.getElementById('detail-combat')) document.getElementById('detail-combat').innerText = char.combat;
             if (document.getElementById('detail-abilities')) document.getElementById('detail-abilities').innerText = char.abilities;
-            if (document.getElementById('detail-poster')) document.getElementById('detail-poster').src = char.poster;
             
-            // 2. Update Cinematic Background & Trailer
+            // Re-trigger Poster animation
+            const posterImg = document.getElementById('detail-poster');
+            if (posterImg) {
+                posterImg.classList.remove('holo-anim');
+                void posterImg.offsetWidth; 
+                posterImg.src = char.poster;
+                posterImg.classList.add('holo-anim');
+            }
+            
             currentTrailerUrl = char.trailer; 
-            const cinematicBg = document.getElementById('cinematic-bg');
-            if (cinematicBg) cinematicBg.style.backgroundImage = `url('${char.image}')`;
+            
+            // Re-trigger Hero image hologram animation
+            const heroImg = document.getElementById('detail-image');
+            if (heroImg) {
+                heroImg.classList.remove('holo-anim');
+                void heroImg.offsetWidth;
+                heroImg.src = char.image;
+                heroImg.classList.add('holo-anim');
+            }
 
-            // 3. Update older image elements (Safeguarded in case they still exist in other tabs)
+            // Update older image elements in scrolling tab safely
             const featureImg = document.getElementById('feature-image');
             const centerImg = document.getElementById('center-image');
             
@@ -861,14 +744,11 @@
                 if(centerImg) { centerImg.src = char.image; centerImg.style.opacity = 1; centerImg.style.transform = 'scale(1)'; }
             }, 300);
 
-            // 4. Update the Page Theme
             document.body.className = char.theme;
 
-            // 5. Update Sidebar Active State
             document.querySelectorAll('.thumb-item').forEach(t => t.classList.remove('active'));
             document.getElementById('thumb-' + id).classList.add('active');
 
-            // 6. Force switch back to Portada tab when a new character is clicked
             if(document.getElementById('v-nav-portada')) document.getElementById('v-nav-portada').click();
             if(document.getElementById('master-portada')) document.getElementById('master-portada').scrollTo(0, 0); 
         }
@@ -898,9 +778,6 @@
             }
         }
 
-        // =========================================================================
-        // TRAILER LOGIC
-        // =========================================================================
         document.addEventListener("DOMContentLoaded", () => {
             const playTrailerBtn = document.getElementById('playTrailerBtn');
             if (playTrailerBtn) {
@@ -915,7 +792,7 @@
         });
 
         // =========================================================================
-        // CLOUD CART LOGIC (Supabase + LocalStorage Fallback)
+        // CLOUD CART LOGIC
         // =========================================================================
         let cart = []; 
 
